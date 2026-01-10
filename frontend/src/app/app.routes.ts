@@ -1,3 +1,5 @@
+import { Signup } from './components/authForms/signup/signup';
+import { Login } from './components/authForms/login/login';
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 
@@ -15,6 +17,9 @@ export const routes: Routes = [
     { path: 'admin',
      loadChildren: () => import('./admin-space/admin-space-module').then(m => m.AdminSpaceModule)
     },
+
+    { path: 'login',component:Login},
+    { path: 'signup', component:Signup}
 
 
 ];

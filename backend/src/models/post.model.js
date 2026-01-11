@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const postSchema = new Schema({
+    
     title:{
         type:String,
         required:true,
@@ -18,7 +19,8 @@ const postSchema = new Schema({
         ref:"User"
     },
     reactions:{
-        type:Number
+        type:Number, 
+        required:true
     }
 },
 {

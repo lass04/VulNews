@@ -19,7 +19,8 @@ const articleSchema = new Schema({
     },
 
     reactions:{
-        type:Number
+        type:Number,
+        required:true
     }
 
 },

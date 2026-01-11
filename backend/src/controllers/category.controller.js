@@ -1,35 +1,33 @@
-import { Article } from "../models/article.model.js";
-import { User } from "../models/user.model.js";
+import { Category } from "../models/category.model.js";
 
-const createArticle = async (req,res) => {
+const createCategory = async (req,res) => {
     
     try{
 
-        const { title , content, author, reactions} = req.body;
-        
-        if(!title || !content || !author || !reactions)
+        const { title , description } = req.body;
+
+        if(!title || !description)
             return res.status(400).json({
                 success:false,
-                message:"All fields are required (Author field is a MongoDB Id)"
+                message:"All fields are required"
             });
 
-        const findAuthor = await User.findOne({_id:author});
-        if(!findAuthor)
+        const findCategory = await Category.findOne({title:title});
+        if(findCategory)
             return res.status(400).json({
                 success:false,
-                message:"Author does not exist"
+                message:"Category already exist"
             });
 
-        const createArticle = await Article.create({
+        const createCategory = await Category.create({
             title,
-            content,
-            author
+            description
         });
 
         res.status(201).json({
             success:true,
             message:"Successfully created",
-            article:createArticle
+            category:createCategory
         });
 
     }catch(error){
@@ -41,7 +39,7 @@ const createArticle = async (req,res) => {
     }
 }
 
-const deleteArticle = async (req,res) => {
+const deleteCategory = async (req,res) => {
    
     try{
 
@@ -49,15 +47,15 @@ const deleteArticle = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Article Id in request parameters"
+                message:"No Category Id in request parameters"
             });
 
         
-        const deleteArticle = await Article.findByIdAndDelete(id);
-        if(!deleteArticle)
+        const deleteCategory = await Category.findByIdAndDelete(id);
+        if(!deleteCategory)
             return res.status(404).json({
                 success:false,
-                message:"Article does not exist"
+                message:"Category does not exist"
             });
 
         res.status(200).json({
@@ -74,7 +72,7 @@ const deleteArticle = async (req,res) => {
     }
 }
 
-const updateArticle = async (req,res) => {
+const updateCategory = async (req,res) => {
     
     try{
 
@@ -82,7 +80,7 @@ const updateArticle = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Article Id in request parameters"
+                message:"No Category Id in request parameters"
             });
 
         if(!Object.keys(req.body).length===0)
@@ -91,17 +89,17 @@ const updateArticle = async (req,res) => {
                 message:"No data provided"
             });
 
-        const updateArticle = await Article.findByIdAndUpdate(id,req.body,{new:true});
-        if(!updateArticle)
+        const updateCategory = await Category.findByIdAndUpdate(id,req.body,{new:true});
+        if(!updateCategory)
             return res.status(404).json({
                 success:false,
-                message:"Article does not exist"
+                message:"Category does not exist"
             });
 
         res.status(200).json({
             succes:true,
             message:"Successfully updated",
-            article:updateArticle
+            category:updateCategory
         });
 
     }catch(error){
@@ -113,16 +111,16 @@ const updateArticle = async (req,res) => {
     }
 }
 
-const getArticles = async (req,res) => {
+const getCategories = async (req,res) => {
 
     try{
 
-        const articles = await Article.find();
+        const categories = await Category.find();
 
         res.status(200).json({
             success:true,
-            message:"All Articles : ",
-            articles:articles
+            message:"All Categories : ",
+            categories:categories
         })
 
     }catch(error){
@@ -135,8 +133,8 @@ const getArticles = async (req,res) => {
 }
 
 export {
-    createArticle,
-    deleteArticle,
-    updateArticle,
-    getArticles
+    createCategory,
+    deleteCategory,
+    updateCategory,
+    getCategories
 }

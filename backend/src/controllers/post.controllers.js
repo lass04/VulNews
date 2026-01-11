@@ -1,13 +1,12 @@
-import { Article } from "../models/article.model.js";
+import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
 
-const createArticle = async (req,res) => {
+const createPost = async (req,res) => {
     
     try{
 
         const { title , content, author, reactions} = req.body;
-        
-        if(!title || !content || !author || !reactions)
+        if(!title || !content || !author)
             return res.status(400).json({
                 success:false,
                 message:"All fields are required (Author field is a MongoDB Id)"
@@ -41,7 +40,7 @@ const createArticle = async (req,res) => {
     }
 }
 
-const deleteArticle = async (req,res) => {
+const deletePost = async (req,res) => {
    
     try{
 
@@ -74,7 +73,7 @@ const deleteArticle = async (req,res) => {
     }
 }
 
-const updateArticle = async (req,res) => {
+const updatePost = async (req,res) => {
     
     try{
 
@@ -113,7 +112,7 @@ const updateArticle = async (req,res) => {
     }
 }
 
-const getArticles = async (req,res) => {
+const getPosts = async (req,res) => {
 
     try{
 
@@ -135,8 +134,8 @@ const getArticles = async (req,res) => {
 }
 
 export {
-    createArticle,
-    deleteArticle,
-    updateArticle,
-    getArticles
+    createPost,
+    deletePost,
+    updatePost,
+    getPosts
 }

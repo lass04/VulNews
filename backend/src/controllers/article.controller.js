@@ -6,7 +6,7 @@ const createArticle = async (req,res) => {
     try{
 
         const { title , content, author, reactions} = req.body;
-        
+
         if(!title || !content || !author || !reactions)
             return res.status(400).json({
                 success:false,
@@ -23,7 +23,8 @@ const createArticle = async (req,res) => {
         const createArticle = await Article.create({
             title,
             content,
-            author
+            author,
+            reactions
         });
 
         res.status(201).json({

@@ -6,7 +6,7 @@ const createPost = async (req,res) => {
     try{
 
         const { title , content, author, reactions} = req.body;
-        if(!title || !content || !author)
+        if(!title || !content || !author || !reactions)
             return res.status(400).json({
                 success:false,
                 message:"All fields are required (Author field is a MongoDB Id)"
@@ -19,16 +19,17 @@ const createPost = async (req,res) => {
                 message:"Author does not exist"
             });
 
-        const createArticle = await Article.create({
+        const createPost = await Post.create({
             title,
             content,
-            author
+            author,
+            reactions
         });
 
         res.status(201).json({
             success:true,
             message:"Successfully created",
-            article:createArticle
+            post:createPost
         });
 
     }catch(error){
@@ -48,15 +49,15 @@ const deletePost = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Article Id in request parameters"
+                message:"No Post Id in request parameters"
             });
 
         
-        const deleteArticle = await Article.findByIdAndDelete(id);
-        if(!deleteArticle)
+        const deletePost = await Post.findByIdAndDelete(id);
+        if(!deletePost)
             return res.status(404).json({
                 success:false,
-                message:"Article does not exist"
+                message:"Post does not exist"
             });
 
         res.status(200).json({
@@ -81,7 +82,7 @@ const updatePost = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Article Id in request parameters"
+                message:"No Post Id in request parameters"
             });
 
         if(!Object.keys(req.body).length===0)
@@ -90,17 +91,17 @@ const updatePost = async (req,res) => {
                 message:"No data provided"
             });
 
-        const updateArticle = await Article.findByIdAndUpdate(id,req.body,{new:true});
-        if(!updateArticle)
+        const updatePost = await Post.findByIdAndUpdate(id,req.body,{new:true});
+        if(!updatePost)
             return res.status(404).json({
                 success:false,
-                message:"Article does not exist"
+                message:"Post does not exist"
             });
 
         res.status(200).json({
             succes:true,
             message:"Successfully updated",
-            article:updateArticle
+            post:updatePost
         });
 
     }catch(error){
@@ -116,13 +117,13 @@ const getPosts = async (req,res) => {
 
     try{
 
-        const articles = await Article.find();
+        const posts = await Post.find();
 
         res.status(200).json({
             success:true,
-            message:"All Articles : ",
-            articles:articles
-        })
+            message:"All Posts : ",
+            posts:posts
+        });
 
     }catch(error){
         return res.status(500).json({

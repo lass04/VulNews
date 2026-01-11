@@ -1,3 +1,4 @@
+import { NotFound } from './components/not-found/not-found';
 import { Signup } from './components/authForms/signup/signup';
 import { Login } from './components/authForms/login/login';
 import { Component } from '@angular/core';
@@ -19,7 +20,8 @@ export const routes: Routes = [
     },
 
     { path: 'login',component:Login},
-    { path: 'signup', component:Signup}
+    { path: 'signup', component:Signup},
 
+    { path:'**',component:NotFound}
 
 ];

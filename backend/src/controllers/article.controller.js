@@ -135,9 +135,30 @@ const getArticles = async (req,res) => {
     }
 }
 
+
+const insertMany = async (req,res) => {
+    
+    try{
+
+        const insertMany = await Category.insertMany(req.body);
+        res.status(201).json({
+            success:true,
+            message:"Successfully inserted",
+            insertions:insertMany
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
 export {
     createArticle,
     deleteArticle,
     updateArticle,
-    getArticles
+    getArticles,
+    insertMany
 }

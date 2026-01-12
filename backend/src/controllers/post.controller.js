@@ -1,33 +1,35 @@
-import { Category } from "../models/category.model.js";
+import { Post } from "../models/post.model.js";
+import { User } from "../models/user.model.js";
 
-const createCategory = async (req,res) => {
+const createPost = async (req,res) => {
     
     try{
 
-        const { title , description } = req.body;
-
-        if(!title || !description)
+        const { title , content, author, reactions} = req.body;
+        if(!title || !content || !author || !reactions)
             return res.status(400).json({
                 success:false,
-                message:"All fields are required"
+                message:"All fields are required (Author field is a MongoDB Id)"
             });
 
-        const findCategory = await Category.findOne({title:title});
-        if(findCategory)
+        const findAuthor = await User.findOne({_id:author});
+        if(!findAuthor)
             return res.status(400).json({
                 success:false,
-                message:"Category already exist"
+                message:"Author does not exist"
             });
 
-        const createCategory = await Category.create({
+        const createPost = await Post.create({
             title,
-            description
+            content,
+            author,
+            reactions
         });
 
         res.status(201).json({
             success:true,
             message:"Successfully created",
-            category:createCategory
+            post:createPost
         });
 
     }catch(error){
@@ -39,7 +41,7 @@ const createCategory = async (req,res) => {
     }
 }
 
-const deleteCategory = async (req,res) => {
+const deletePost = async (req,res) => {
    
     try{
 
@@ -47,15 +49,15 @@ const deleteCategory = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Category Id in request parameters"
+                message:"No Post Id in request parameters"
             });
 
         
-        const deleteCategory = await Category.findByIdAndDelete(id);
-        if(!deleteCategory)
+        const deletePost = await Post.findByIdAndDelete(id);
+        if(!deletePost)
             return res.status(404).json({
                 success:false,
-                message:"Category does not exist"
+                message:"Post does not exist"
             });
 
         res.status(200).json({
@@ -72,7 +74,7 @@ const deleteCategory = async (req,res) => {
     }
 }
 
-const updateCategory = async (req,res) => {
+const updatePost = async (req,res) => {
     
     try{
 
@@ -80,7 +82,7 @@ const updateCategory = async (req,res) => {
         if(!id)
             return res.status(400).json({
                 success:false,
-                message:"No Category Id in request parameters"
+                message:"No Post Id in request parameters"
             });
 
         if(!Object.keys(req.body).length===0)
@@ -89,17 +91,17 @@ const updateCategory = async (req,res) => {
                 message:"No data provided"
             });
 
-        const updateCategory = await Category.findByIdAndUpdate(id,req.body,{new:true});
-        if(!updateCategory)
+        const updatePost = await Post.findByIdAndUpdate(id,req.body,{new:true});
+        if(!updatePost)
             return res.status(404).json({
                 success:false,
-                message:"Category does not exist"
+                message:"Post does not exist"
             });
 
         res.status(200).json({
             succes:true,
             message:"Successfully updated",
-            category:updateCategory
+            post:updatePost
         });
 
     }catch(error){
@@ -111,17 +113,17 @@ const updateCategory = async (req,res) => {
     }
 }
 
-const getCategories = async (req,res) => {
+const getPosts = async (req,res) => {
 
     try{
 
-        const categories = await Category.find();
+        const posts = await Post.find();
 
         res.status(200).json({
             success:true,
-            message:"All Categories : ",
-            categories:categories
-        })
+            message:"All Posts : ",
+            posts:posts
+        });
 
     }catch(error){
         return res.status(500).json({
@@ -129,33 +131,12 @@ const getCategories = async (req,res) => {
             message:"Internal Server error",
             error:error.message
         }); 
-    }
-}
-
-const insertMany = async (req,res) => {
-    
-    try{
-
-        const insertMany = await Category.insertMany(req.body);
-        res.status(201).json({
-            success:true,
-            message:"Successfully inserted",
-            insertions:insertMany
-        });
-
-    }catch(error){
-        return res.status(500).json({
-            success:false,
-            message:"Internal Server error",
-            error:error.message
-        });
     }
 }
 
 export {
-    createCategory,
-    deleteCategory,
-    updateCategory,
-    getCategories,
-    insertMany
+    createPost,
+    deletePost,
+    updatePost,
+    getPosts
 }

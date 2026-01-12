@@ -1,40 +1,61 @@
 import jwt from "jsonwebtoken";
 
+const verifyToken = (authHead) => {
+
+    if(!authHead)
+        return null;
+
+    const token = authHead.split(" ")[1];
+    if(!token)
+        return null
+
+    try{
+        const payload = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
+        return payload;
+    }catch(err){
+        return null;
+    }
+}
+
+
 const authenticate = (req,res,next) => {
 
-    const token = req.headers.authorization;
-    if(!token)
+    const authHead = req.headers.authorization;
+    
+    const verif = verifyToken(authHead);
+
+    if(verif===null)
         return res.status(403).json({
             success:false,
-            message:"No Access Token"
-        });
-
-    req.user = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
-        if(err)
-            return res.status(403).json({
-        success:false,
-        message:"Not authorized (Error while verifying token)"
+            message:"Access Denied"
     });
 
-    req.user = payload;
+    req.user=verif;
     next();
-    })
-    
 }
 
 const adminOnly = (req,res,next) => {
-    
-    const auth = req.headers.authorization;
-    const token = auth.split(" ")[1];
 
-    if(!token)
+    const authHead = req.headers.authorization;
+
+    const verif = verifyToken(authHead);
+
+    if(verif===null)
         return res.status(403).json({
             success:false,
-            message:"No token"
-            });
-        
-    jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,(err,payload))
+            message:"Access Denied"
+        });
 
-    
+    if(verif.role!=="admin")
+        return res.status(403).json({
+            success:false,
+            message:"Admin Only"
+        });
 
+    next();
+}
+
+export {
+    authenticate,
+    adminOnly
 }

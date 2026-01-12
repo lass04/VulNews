@@ -1,7 +1,7 @@
 import { Post } from './Post';
 import { User } from './User';
 
-export interface PostComment{
+export interface Comment{
     id:number,
     content:String,
     author:User,

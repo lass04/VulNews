@@ -9,10 +9,12 @@ import commentRouter from "../routes/comment.route.js";
 const app = express();
 
 // Parse Request to JSON
+
 app.use(express.json());
 
 
 // Routing
+
 app.use("/users",userRouter);
 app.use("/articles",articleRouter);
 app.use("/posts",postRouter);

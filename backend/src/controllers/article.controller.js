@@ -7,7 +7,7 @@ const createArticle = async (req,res) => {
 
         const { title , content, author, reactions} = req.body;
 
-        if(!title || !content || !author || !reactions)
+        if(!title || !content || !author || reactions===undefined)
             return res.status(400).json({
                 success:false,
                 message:"All fields are required (Author field is a MongoDB Id)"
@@ -135,12 +135,11 @@ const getArticles = async (req,res) => {
     }
 }
 
-
 const insertMany = async (req,res) => {
     
     try{
 
-        const insertMany = await Category.insertMany(req.body);
+        const insertMany = await Article.insertMany(req.body);
         res.status(201).json({
             success:true,
             message:"Successfully inserted",
@@ -155,6 +154,8 @@ const insertMany = async (req,res) => {
         });
     }
 }
+
+
 export {
     createArticle,
     deleteArticle,

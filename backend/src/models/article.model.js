@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const articleSchema = new Schema({
+    
     title:{
         type:String,
         trim:true,

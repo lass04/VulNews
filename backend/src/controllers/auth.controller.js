@@ -61,6 +61,7 @@ const login = async (req,res) => {
                 message:"No user with these credentials"
             });
 
+            
         const match = await findUser.comparePassword(password);
         if(!match)
             return res.status(401).json({
@@ -71,6 +72,7 @@ const login = async (req,res) => {
 
         const refreshToken = createRefreshToken(findUser);
         const accessToken = createAccessToken(findUser);
+
 
         findUser.refreshToken = refreshToken;
         await findUser.save();

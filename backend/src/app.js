@@ -5,6 +5,7 @@ import articleRouter from "./routes/article.route.js";
 import postRouter from "./routes/post.route.js";
 import categoryRouter from "./routes/category.route.js";
 import commentRouter from "./routes/comment.route.js";
+import authRouter from "./routes/auth.route.js";
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use("/articles",articleRouter);
 app.use("/posts",postRouter);
 app.use("/categories",categoryRouter);
 app.use("/comments",commentRouter);
+app.use("/auth",authRouter);
 
 export default app;

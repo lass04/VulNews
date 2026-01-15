@@ -6,6 +6,7 @@ import postRouter from "./routes/post.route.js";
 import categoryRouter from "./routes/category.route.js";
 import commentRouter from "./routes/comment.route.js";
 import authRouter from "./routes/auth.route.js";
+import cveRouter from "./routes/cve.route.js";
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use("/posts",postRouter);
 app.use("/categories",categoryRouter);
 app.use("/comments",commentRouter);
 app.use("/auth",authRouter);
+app.use("/cve",cveRouter);
 
 export default app;

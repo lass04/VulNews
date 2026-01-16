@@ -2,26 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class PostService {
+export class ToolService {
 
-  private readonly BASE_URL = 'http://localhost:2004/posts';
+  private readonly BASE_URL = 'http://localhost:2004/tools';
 
   constructor(private http: HttpClient) {}
 
-  createPost(data: any) {
+  createTool(data: any) {
     return this.http.post(`${this.BASE_URL}/create`, data);
   }
 
-  updatePost(id: string, data: any) {
+  updateTool(id: string, data: any) {
     return this.http.put(`${this.BASE_URL}/update/${id}`, data);
   }
 
-  deletePost(id: string) {
+  deleteTool(id: string) {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getPosts() {
+  getTools() {
     return this.http.get(`${this.BASE_URL}/getAll`);
+  }
+
+  insertManyTools(data: any[]) {
+    return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
   
 }

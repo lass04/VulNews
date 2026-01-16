@@ -1,8 +1,31 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ArticleSvc {
-  
+@Injectable({ providedIn: 'root' })
+export class ArticleService {
+
+  private readonly BASE_URL = 'http://localhost:2004/articles';
+
+  constructor(private http: HttpClient) {}
+
+  createArticle(data: any) {
+    return this.http.post(`${this.BASE_URL}/create`, data);
+  }
+
+  updateArticle(id: string, data: any) {
+    return this.http.put(`${this.BASE_URL}/update/${id}`, data);
+  }
+
+  deleteArticle(id: string) {
+    return this.http.delete(`${this.BASE_URL}/delete/${id}`);
+  }
+
+  getArticles() {
+    return this.http.get(`${this.BASE_URL}/getAll`);
+  }
+
+  insertManyArticles(data: any[]) {
+    return this.http.post(`${this.BASE_URL}/insertMany`, data);
+  }
 }
+

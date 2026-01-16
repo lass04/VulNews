@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 import userRouter from "./routes/user.route.js";
 import articleRouter from "./routes/article.route.js";
@@ -14,6 +15,16 @@ const app = express();
 // Parse Request to JSON
 
 app.use(express.json());
+
+
+// Cors Configuration
+
+app.use(cors({
+  origin: 'http://localhost:4200', 
+  methods: ['GET','POST','PUT','DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 
 // Routing

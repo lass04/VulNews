@@ -7,6 +7,7 @@ import categoryRouter from "./routes/category.route.js";
 import commentRouter from "./routes/comment.route.js";
 import authRouter from "./routes/auth.route.js";
 import cveRouter from "./routes/cve.route.js";
+import toolRouter from "./routes/tool.route.js";
 
 const app = express();
 
@@ -24,5 +25,6 @@ app.use("/categories",categoryRouter);
 app.use("/comments",commentRouter);
 app.use("/auth",authRouter);
 app.use("/cve",cveRouter);
+app.use("/tools",toolRouter);
 
 export default app;

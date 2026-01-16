@@ -13,7 +13,7 @@ export class UserService {
   }
 
   updateUser(id: string, data: any) {
-    return this.http.put(`${this.BASE_URL}/update/${id}`, data);
+    return this.http.patch(`${this.BASE_URL}/update/${id}`, data);
   }
 
   deleteUser(id: string) {
@@ -23,6 +23,6 @@ export class UserService {
   getUsers() {
     return this.http.get(`${this.BASE_URL}/getAll`);
   }
-  
+
 }
 

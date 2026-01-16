@@ -10,6 +10,6 @@ const router = new Router();
 router.route("/create").post(authenticate,createPost);
 router.route("/delete").delete(authenticate,deletePost);
 router.route("/update/:id").patch(authenticate,updatePost);
-router.route("/getAll").get(authenticate,getPosts);
+router.route("/getAll").get(getPosts);
 
 export default router;

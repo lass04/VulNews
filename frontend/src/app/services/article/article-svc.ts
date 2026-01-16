@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ArticleService {
@@ -13,19 +15,20 @@ export class ArticleService {
   }
 
   updateArticle(id: string, data: any) {
-    return this.http.put(`${this.BASE_URL}/update/${id}`, data);
+    return this.http.patch(`${this.BASE_URL}/update/${id}`, data);
   }
 
   deleteArticle(id: string) {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getArticles() {
-    return this.http.get(`${this.BASE_URL}/getAll`);
+  getArticles(): Observable<any[]> {
+    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
+      map(res => res.data || [])
+    );
   }
 
   insertManyArticles(data: any[]) {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
 }
-

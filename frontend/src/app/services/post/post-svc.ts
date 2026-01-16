@@ -1,3 +1,6 @@
+import { Post } from './../../interfaces/Post';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -13,16 +16,16 @@ export class PostService {
   }
 
   updatePost(id: string, data: any) {
-    return this.http.put(`${this.BASE_URL}/update/${id}`, data);
+    return this.http.patch(`${this.BASE_URL}/update/${id}`, data);
   }
 
   deletePost(id: string) {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getPosts() {
-    return this.http.get(`${this.BASE_URL}/getAll`);
+  getPosts(): Observable<any[]> {
+    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
+      map(res => res.data || [])
+    );
   }
-  
 }
-

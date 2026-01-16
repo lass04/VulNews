@@ -13,7 +13,7 @@ export class CommentService {
   }
 
   updateComment(id: string, data: any) {
-    return this.http.put(`${this.BASE_URL}/update/${id}`, data);
+    return this.http.patch(`${this.BASE_URL}/update/${id}`, data);
   }
 
   deleteComment(id: string) {

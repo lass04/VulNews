@@ -120,7 +120,7 @@ const getCategories = async (req,res) => {
         res.status(200).json({
             success:true,
             message:"All Categories : ",
-            categories:categories
+            data:categories
         })
 
     }catch(error){

@@ -122,7 +122,7 @@ const getTools = async (req,res) => {
         res.status(200).json({
             succes:true,
             message:"All Tools : ",
-            tools:tools
+            data:tools
         }); 
 
     }catch(error){

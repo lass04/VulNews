@@ -122,7 +122,7 @@ const getPosts = async (req,res) => {
         res.status(200).json({
             success:true,
             message:"All Posts : ",
-            posts:posts
+            data:posts
         });
 
     }catch(error){

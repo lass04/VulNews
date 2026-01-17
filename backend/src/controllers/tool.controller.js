@@ -117,7 +117,8 @@ const getTools = async (req,res) => {
    
     try{
 
-        const tools = await Tool.find();
+        const limit = req.query.limit;
+        const tools = await Tool.find().limit(limit);
 
         res.status(200).json({
             succes:true,
@@ -154,10 +155,44 @@ const insertMany = async (req,res) => {
     }
 }
 
+const getByCategory = async (req,res) => {
+   
+    try{
+
+        const cat_id = req.params.id;
+        if(!cat_id)
+            return res.status(400).json({
+                succes:false,
+                message:"No Category id in req params"
+            });
+
+        const tools = await Tool.find({category:cat_id});
+        if(!tools)
+            return res.status(404).json({
+                success:false,
+                message:"No articles with this id"
+            });
+
+        res.status(200).json({
+            success:true,
+            message:"Tools : ",
+            data:tools
+        });
+
+    }catch(error){
+         return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createTool,
     deleteTool,
     updateTool,
     getTools,
-    insertMany
+    insertMany,
+    getByCategory
 }

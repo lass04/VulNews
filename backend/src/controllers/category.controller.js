@@ -115,9 +115,10 @@ const getCategories = async (req,res) => {
 
     try{
 
-        const categories = await Category.find();
+        const limit = req.query.limit;
+        const categories = await Category.find().limit(limit);
 
-        res.status(200).json({
+       res.status(200).json({
             success:true,
             message:"All Categories : ",
             data:categories
@@ -152,10 +153,45 @@ const insertMany = async (req,res) => {
     }
 }
 
+const getCategoryByName = async (req,res) => {
+    
+    try{
+
+        const category = req.query.category;
+
+        if(!category)
+            return res.status(400).json({
+                succes:false,
+                message:"No category in query params"
+            });
+
+        const findCategory = await Category.findOne({title:{$regex:category,$options:"i"}});
+        if(!findCategory)
+            return res.status(404).json({
+                success:false,
+                message:"No category with this name"
+            });
+
+        res.status(200).json({
+            success:true,
+            message:"Category",
+            data:findCategory
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createCategory,
     deleteCategory,
     updateCategory,
     getCategories,
-    insertMany
+    insertMany,
+    getCategoryByName
 }

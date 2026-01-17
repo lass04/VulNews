@@ -155,11 +155,45 @@ const insertMany = async (req,res) => {
     }
 }
 
+const getByCategory = async (req,res) => {
+   
+    try{
+
+        const cat_id = req.params.id;
+        if(!cat_id)
+            return res.status(400).json({
+                succes:false,
+                message:"No Category id in req params"
+            });
+
+
+        const articles = await Article.find({category:cat_id});
+        if(!articles)
+            return res.status(404).json({
+                success:false,
+                message:"No articles with this id"
+            });
+
+        res.status(200).json({
+            success:true,
+            message:"Articles : ",
+            data:articles
+        });
+
+    }catch(error){
+         return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
 
 export {
     createArticle,
     deleteArticle,
     updateArticle,
     getArticles,
-    insertMany
+    insertMany,
+    getByCategory
 }

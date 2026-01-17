@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { createCategory, deleteCategory, updateCategory, getCategories, insertMany} from "../controllers/category.controller.js";
+import { createCategory, deleteCategory, updateCategory, getCategories, insertMany, getCategoryByName} 
+from "../controllers/category.controller.js";
 import { adminOnly } from "../middlewares/auth.middleware.js";
 
 const router = new Router();
@@ -12,5 +13,7 @@ router.route("/delete").delete(adminOnly,deleteCategory);
 router.route("/update/:id").patch(adminOnly,updateCategory);
 router.route("/getAll").get(getCategories);
 router.route("/insertMany").post(insertMany);
+router.route("/getByName").get(getCategoryByName);
+
 
 export default router;

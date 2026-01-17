@@ -1,0 +1,76 @@
+<app-visitor-nav></app-visitor-nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+  <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-700 mb-8">
+    <h2 class="text-2xl font-bold text-red-700 mb-2">
+      Category: {{ category }}
+    </h2>
+    <p class="text-gray-600">
+      Explore articles and tools related to this cybersecurity category.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <section class="lg:col-span-2 space-y-4">
+
+      <h3 class="text-xl font-bold text-gray-800 mb-3">Articles</h3>
+
+      <article *ngFor="let article of articles"
+        class="bg-white p-5 rounded-lg shadow hover:shadow-md transition border-l-4 border-red-700">
+
+        <h4 class="font-bold text-gray-800 mb-2">
+          {{ article.title }}
+        </h4>
+
+        <p class="text-gray-600 text-sm mb-3">
+          {{ article.description | slice:0:150 }}...
+        </p>
+
+        <a class="text-red-700 font-semibold hover:underline cursor-pointer">
+          Read more →
+        </a>
+      </article>
+
+      <p *ngIf="articles.length === 0" class="text-gray-500">
+        No articles found for this category.
+      </p>
+
+    </section>
+
+    <aside class="space-y-4">
+
+      <h3 class="text-xl font-bold text-gray-800 mb-3">Tools</h3>
+
+      <div *ngFor="let tool of tools"
+        class="bg-white p-4 rounded-lg shadow border-l-4 border-red-700">
+
+        <h4 class="font-bold text-gray-800">
+          {{ tool.name }}
+        </h4>
+
+        <p class="text-sm text-gray-600">
+          {{ tool.description | slice:0:100 }}...
+        </p>
+
+        <a [href]="tool.link" target="_blank"
+           class="text-red-700 text-sm font-semibold hover:underline">
+          Learn more →
+        </a>
+      </div>
+
+      <p *ngIf="tools.length === 0" class="text-gray-500 text-sm">
+        No tools found for this category.
+      </p>
+
+    </aside>
+
+  </div>
+
+</main>
+
+<footer class="bg-red-700 text-white text-center py-4 mt-10">
+  © 2026 VulNews — All rights reserved
+</footer>
+

@@ -81,7 +81,9 @@
 
       <ul class="space-y-2 text-gray-700">
         <li *ngFor="let cat of categories">
-          <a class="hover:text-red-700 cursor-pointer">
+          <a class="hover:text-red-700 cursor-pointer"
+            [routerLink]="['/category',cat.title]"
+          >
             {{ cat.title }}
           </a>
         </li>

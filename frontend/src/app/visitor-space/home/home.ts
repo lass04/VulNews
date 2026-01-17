@@ -3,14 +3,15 @@ import { PostService } from './../../services/post/post-svc';
 import { CategoryService } from './../../services/category/category-svc';
 import { ArticleService } from './../../services/article/article-svc';
 
-import { VisitorNav } from './../visitor-nav/visitor-nav';
+import { VisitorNav } from '../../components/visitor-nav/visitor-nav';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-module";
 
 @Component({
   selector: 'app-visitor-home',
   standalone: true,
-  imports: [CommonModule,VisitorNav],
+  imports: [CommonModule, VisitorNav, AdminSpaceRoutingModule],
   templateUrl: './home.html'
 })
 export class Home implements OnInit {
@@ -39,7 +40,7 @@ export class Home implements OnInit {
     this.articleService.getArticles().subscribe(res => {
       this.articles = Array.isArray(res) ? res : Object.values(res);
     });
-    this.categoryService.getCategories().subscribe(res => {
+    this.categoryService.getCategories(10).subscribe(res => {
       this.categories = Array.isArray(res) ? res : Object.values(res);
     });
     this.postService.getPosts().subscribe(res => {

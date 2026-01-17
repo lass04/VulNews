@@ -22,8 +22,8 @@ export class CategoryService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getCategories(): Observable<any[]> {
-    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
+  getCategories(limit:number): Observable<any[]> {
+    return this.http.get<any>(`${this.BASE_URL}/getAll?limit=${limit}`).pipe(
       map(res => res.data || [])
     );
   }
@@ -31,5 +31,10 @@ export class CategoryService {
   insertManyCategories(data: any[]): Observable<any> {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
+
+  getCategoryByName(category:String):Observable<any>{
+    return this.http.get<any>(`${this.BASE_URL}/getByName?category=${category}`);
+  }
+  
 }
 

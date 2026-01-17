@@ -1,3 +1,4 @@
+import { CategoryComponent } from './components/category-component/category-component';
 import { NotFound } from './components/not-found/not-found';
 import { Signup } from './components/authForms/signup/signup';
 import { Login } from './components/authForms/login/login';
@@ -21,6 +22,7 @@ export const routes: Routes = [
 
     { path: 'login',component:Login},
     { path: 'signup', component:Signup},
+    { path: 'category/:category', component:CategoryComponent},
 
     { path:'**',component:NotFound}
 

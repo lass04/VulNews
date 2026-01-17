@@ -31,5 +31,10 @@ export class ToolService {
   insertManyTools(data: any[]) {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
+
+  getToolsByCatId(cat:string):Observable<any[]>{
+    return this.http.get<any[]>(`${this.BASE_URL}/getByCategory/${cat}`);
+  }
+
 }
 

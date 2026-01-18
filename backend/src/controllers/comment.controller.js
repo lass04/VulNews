@@ -27,8 +27,6 @@ const createComment = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             comment:createComment
         });
 
@@ -61,7 +59,6 @@ const deleteComment = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
             message:"Successfully deleted"
         });
             
@@ -101,8 +98,6 @@ const updateComment = async (req,res) => {
             });
 
         res.status(200).json({
-            succes:true,
-            message:"Successfully updated",
             comment:updateComment
         });
 
@@ -122,8 +117,6 @@ const getComments = async (req,res) => {
         const comments = await Comment.find();
 
         res.status(200).json({
-            success:true,
-            message:"All Comments : ",
             data:comments
         })
 

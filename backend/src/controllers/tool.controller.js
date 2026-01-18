@@ -28,8 +28,6 @@ const createTool = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             tool:createTool
         });
 
@@ -61,7 +59,6 @@ const deleteTool = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
             message:"Deleted successfully"
         });
 
@@ -99,8 +96,6 @@ const updateTool = async (req,res) => {
             });
             
         res.status(200).json({
-            success:true,
-            message:"Updated succesfully",
             tool:updateTool
         });
 
@@ -121,8 +116,6 @@ const getTools = async (req,res) => {
         const tools = await Tool.find().limit(limit);
 
         res.status(200).json({
-            succes:true,
-            message:"All Tools : ",
             data:tools
         }); 
 
@@ -141,8 +134,6 @@ const insertMany = async (req,res) => {
 
         const insertMany = await Tool.insertMany(req.body);
         res.status(201).json({
-            success:true,
-            message:"Successfully inserted",
             insertions:insertMany
         });
 
@@ -174,8 +165,6 @@ const getByCategory = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
-            message:"Tools : ",
             data:tools
         });
 
@@ -188,11 +177,44 @@ const getByCategory = async (req,res) => {
     }
 }
 
+const getById = async (req,res) => {
+    
+    try{
+
+        const id = req.params.id;
+        if(!id)
+            return res.status(400).json({
+                success:false,
+                message:"No Id in req params"
+            });
+
+        const tool = await Tool.findOne({_id:id});
+        if(!tool)
+            return res.status(404).json({
+                success:false,
+                message:"Tool not found"
+            });
+
+        res.status(200).json({
+            data:tool
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
+
 export {
     createTool,
     deleteTool,
     updateTool,
     getTools,
     insertMany,
-    getByCategory
+    getByCategory,
+    getById
 }

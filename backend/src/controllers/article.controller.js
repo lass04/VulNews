@@ -28,8 +28,6 @@ const createArticle = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             article:createArticle
         });
 
@@ -62,7 +60,6 @@ const deleteArticle = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
             message:"Successfully deleted"
         });
             
@@ -100,8 +97,6 @@ const updateArticle = async (req,res) => {
             });
 
         res.status(200).json({
-            succes:true,
-            message:"Successfully updated",
             article:updateArticle
         });
 
@@ -121,8 +116,6 @@ const getArticles = async (req,res) => {
         const articles = await Article.find();
 
         res.status(200).json({
-            success:true,
-            message:"All Articles : ",
             data:articles
         })
 
@@ -141,8 +134,6 @@ const insertMany = async (req,res) => {
 
         const insertMany = await Article.insertMany(req.body);
         res.status(201).json({
-            success:true,
-            message:"Successfully inserted",
             insertions:insertMany
         });
 
@@ -175,13 +166,42 @@ const getByCategory = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
-            message:"Articles : ",
             data:articles
         });
 
     }catch(error){
          return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
+const getById = async (req,res) => {
+    
+    try{
+
+        const id = req.params.id;
+        if(!id)
+            return res.status(400).json({
+                success:false,
+                message:"No Id in req params"
+            });
+
+        const article = await Article.findOne({_id:id});
+        if(!article)
+            return res.status(404).json({
+                success:false,
+                message:"Article not found"
+            });
+
+        res.status(200).json({
+            data:article
+        });
+
+    }catch(error){
+        return res.status(500).json({
             success:false,
             message:"Internal Server error",
             error:error.message
@@ -195,5 +215,6 @@ export {
     updateArticle,
     getArticles,
     insertMany,
-    getByCategory
+    getByCategory,
+    getById
 }

@@ -25,8 +25,6 @@ const createCategory = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             category:createCategory
         });
 
@@ -59,7 +57,6 @@ const deleteCategory = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
             message:"Successfully deleted"
         });
             
@@ -97,8 +94,6 @@ const updateCategory = async (req,res) => {
             });
 
         res.status(200).json({
-            succes:true,
-            message:"Successfully updated",
             category:updateCategory
         });
 
@@ -119,8 +114,6 @@ const getCategories = async (req,res) => {
         const categories = await Category.find().limit(limit);
 
        res.status(200).json({
-            success:true,
-            message:"All Categories : ",
             data:categories
         })
 
@@ -139,8 +132,6 @@ const insertMany = async (req,res) => {
 
         const insertMany = await Category.insertMany(req.body);
         res.status(201).json({
-            success:true,
-            message:"Successfully inserted",
             insertions:insertMany
         });
 
@@ -173,8 +164,6 @@ const getCategoryByName = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
-            message:"Category",
             data:findCategory
         });
 

@@ -1,5 +1,6 @@
 import Router from "express";
-import { createTool, deleteTool, updateTool, getTools , insertMany , getByCategory } from "../controllers/tool.controller.js";
+import { createTool, deleteTool, updateTool, getTools , insertMany , getByCategory, getById } 
+from "../controllers/tool.controller.js";
 
 const router = new Router();
 
@@ -10,5 +11,6 @@ router.route("/update/:id").patch(updateTool);
 router.route("/getAll").get(getTools);
 router.route("/insertMany").post(insertMany);
 router.route("/getByCategory/:id").get(getByCategory);
+router.route("/getById/:id").get(getById);
 
 export default router;

@@ -28,8 +28,6 @@ const createUser = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             user:createUser
         });
 
@@ -62,7 +60,6 @@ const deleteUser = async (req,res) => {
             });
 
         res.status(200).json({
-            succes:true,
             message:"Successfully deleted"
         })
  
@@ -100,8 +97,6 @@ const updateUser = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
-            message:"User successfully updated",
             user:updateUser
         });
 
@@ -121,8 +116,6 @@ const getUsers = async (req,res) => {
         const users = await User.find();
         
         res.status(200).json({
-            success:true,
-            message:"All Users : ",
             data:users
         });
 

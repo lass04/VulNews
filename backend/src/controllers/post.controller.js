@@ -27,8 +27,6 @@ const createPost = async (req,res) => {
         });
 
         res.status(201).json({
-            success:true,
-            message:"Successfully created",
             post:createPost
         });
 
@@ -61,7 +59,6 @@ const deletePost = async (req,res) => {
             });
 
         res.status(200).json({
-            success:true,
             message:"Successfully deleted"
         });
             
@@ -99,8 +96,6 @@ const updatePost = async (req,res) => {
             });
 
         res.status(200).json({
-            succes:true,
-            message:"Successfully updated",
             post:updatePost
         });
 
@@ -120,8 +115,6 @@ const getPosts = async (req,res) => {
         const posts = await Post.find();
 
         res.status(200).json({
-            success:true,
-            message:"All Posts : ",
             data:posts
         });
 

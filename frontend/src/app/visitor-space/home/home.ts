@@ -1,3 +1,7 @@
+import { Tool } from './../../interfaces/Tool';
+import { Post } from './../../interfaces/Post';
+import { Category } from './../../interfaces/Category';
+import { Article } from './../../interfaces/Article';
 import { ToolService } from './../../services/tool/tool-svc';
 import { PostService } from './../../services/post/post-svc';
 import { CategoryService } from './../../services/category/category-svc';
@@ -16,10 +20,10 @@ import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-m
 })
 export class Home implements OnInit {
 
-  articles: any[] = [];
-  categories: any[] = [];
-  posts: any[] = [];
-  tools: any[] = [];
+  articles: Article[] = [];
+  categories: Category[] = [];
+  posts: Post[] = [];
+  tools: Tool[] = [];
 
   loading = true;
 
@@ -38,16 +42,16 @@ export class Home implements OnInit {
     this.loading = true;
 
     this.articleService.getArticles().subscribe(res => {
-      this.articles = Array.isArray(res) ? res : Object.values(res);
+      this.articles = res.data;
     });
     this.categoryService.getCategories(10).subscribe(res => {
-      this.categories = Array.isArray(res) ? res : Object.values(res);
+      this.categories = res.data;
     });
     this.postService.getPosts().subscribe(res => {
-      this.posts = Array.isArray(res) ? res : Object.values(res);
+      this.posts = res.data;
     });
     this.toolService.getTools().subscribe(res => {
-      this.tools = Array.isArray(res) ? res : Object.values(res);
+      this.tools = res.data;
     });
 
     setTimeout(() => this.loading = false, 800);

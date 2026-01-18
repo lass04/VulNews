@@ -1,61 +1,70 @@
 <app-visitor-nav></app-visitor-nav>
 
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-
-  <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-700 mb-8">
-    <h2 class="text-2xl font-bold text-red-700 mb-2">
+<!-- Header -->
+<section class="bg-gradient-to-r from-red-800 to-black text-white">
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <h2 class="text-3xl font-extrabold mb-2">
       Category: {{ category }}
     </h2>
-    <p class="text-gray-600">
-      Explore articles and tools related to this cybersecurity category.
+    <p class="text-red-100 max-w-2xl">
+      Explore articles and tools related to this cybersecurity domain.
     </p>
   </div>
+</section>
 
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <section class="lg:col-span-2 space-y-4">
-
-      <h3 class="text-xl font-bold text-gray-800 mb-3">Articles</h3>
+    
+    <section class="lg:col-span-2 space-y-5 mt-16">
+      <h3 class="text-xl font-bold text-gray-800">
+        Articles
+      </h3>
 
       <article *ngFor="let article of articles"
-        class="bg-white p-5 rounded-lg shadow hover:shadow-md transition border-l-4 border-red-700">
+        class="group bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 border border-transparent hover:border-red-200">
 
-        <h4 class="font-bold text-gray-800 mb-2">
+        <h4 class="font-bold text-lg text-gray-800 mb-2 group-hover:text-red-700 transition">
           {{ article.title }}
         </h4>
 
-        <p class="text-gray-600 text-sm mb-3">
-          {{ article.description | slice:0:150 }}...
+        <p class="text-sm text-gray-600 mb-4">
+          {{ article.createdAt | slice:0:150 }}...
         </p>
 
-        <a class="text-red-700 font-semibold hover:underline cursor-pointer">
-          Read more →
+        <a
+          class="inline-flex items-center text-red-700 font-semibold hover:underline"
+          [routerLink]="['/articles',article._id]">
+          Read more
+          <span class="ml-1 group-hover:translate-x-1 transition">→</span>
         </a>
       </article>
 
       <p *ngIf="articles.length === 0" class="text-gray-500">
         No articles found for this category.
       </p>
-
     </section>
 
-    <aside class="space-y-4">
-
-      <h3 class="text-xl font-bold text-gray-800 mb-3">Tools</h3>
+    
+    <aside class="space-y-4 mt-16">
+      <h3 class="text-xl font-bold text-gray-800">
+        Tools
+      </h3>
 
       <div *ngFor="let tool of tools"
-        class="bg-white p-4 rounded-lg shadow border-l-4 border-red-700">
+        class="bg-gradient-to-br from-white to-red-50 p-5 rounded-xl shadow border border-red-100 hover:shadow-lg transition">
 
-        <h4 class="font-bold text-gray-800">
+        <h4 class="font-bold text-gray-800 mb-1">
           {{ tool.name }}
         </h4>
 
-        <p class="text-sm text-gray-600">
+        <p class="text-sm text-gray-600 mb-3">
           {{ tool.description | slice:0:100 }}...
         </p>
 
-        <a [href]="tool.link" target="_blank"
-           class="text-red-700 text-sm font-semibold hover:underline">
+        <a
+          [routerLink]="['/tools',tool._id]"
+          class="text-red-700 text-sm font-semibold hover:underline">
           Learn more →
         </a>
       </div>
@@ -63,14 +72,11 @@
       <p *ngIf="tools.length === 0" class="text-gray-500 text-sm">
         No tools found for this category.
       </p>
-
     </aside>
 
   </div>
-
 </main>
 
-<footer class="bg-red-700 text-white text-center py-4 mt-10">
+<footer class="mt-16 bg-gradient-to-r from-red-800 to-black text-white text-center py-6 text-sm">
   © 2026 VulNews — All rights reserved
 </footer>
-

@@ -1,3 +1,5 @@
+import { User } from './../../interfaces/User';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -20,8 +22,8 @@ export class UserService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getUsers() {
-    return this.http.get(`${this.BASE_URL}/getAll`);
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.BASE_URL}/getAll`);
   }
 
 }

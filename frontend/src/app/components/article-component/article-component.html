@@ -1,0 +1,29 @@
+<app-visitor-nav></app-visitor-nav>
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+
+  <div *ngIf="loading" class="text-center py-20 text-gray-500">
+    ⏳ Loading article...
+  </div>
+
+  <article *ngIf="!loading"
+    class="bg-white rounded-2xl shadow-xl p-10 border border-red-100">
+
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-4 leading-tight">
+      {{ article.title }}
+    </h1>
+
+    <p class="text-sm text-gray-500 mb-8">
+      Published on {{ article.createdAt | date:'mediumDate' }}
+    </p>
+
+    <div class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+      {{ article.content }}
+    </div>
+  </article>
+
+</main>
+
+<footer class="mt-16 bg-gradient-to-r from-red-800 to-black text-white text-center py-6 text-sm">
+  © 2026 VulNews — All rights reserved
+</footer>

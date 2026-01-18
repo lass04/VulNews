@@ -1,51 +1,80 @@
 <app-visitor-nav></app-visitor-nav>
 
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+<section class="relative bg-gradient-to-br from-red-800 via-red-700 to-black text-white">
+  <div class="max-w-7xl mx-auto px-6 py-14">
+    <h1 class="text-3xl sm:text-4xl font-extrabold mb-4">
+      VulNews
+    </h1>
+    <p class="max-w-2xl text-red-100 text-lg">
+      A community-driven cybersecurity platform to explore vulnerabilities,
+      tools, and discussions — stay ahead of threats.
+    </p>
+  </div>
+</section>
+
+<main
+  class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 grid grid-cols-1 lg:grid-cols-4 gap-6">
 
   
-  <section class="lg:col-span-3 space-y-6">
+  <section class="lg:col-span-3 space-y-8">
 
     
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-700">
-      <h2 class="text-xl font-bold text-red-700 mb-2">Welcome to VulNews</h2>
-      <p class="text-gray-700">
-        Your community-driven cybersecurity platform.
-        Explore vulnerabilities, tools, and discussions to stay secure.
-      </p>
+    <div class="grid sm:grid-cols-2 gap-6">
+      <div
+        class="bg-white/90 backdrop-blur p-6 rounded-xl shadow-lg border border-red-100 hover:shadow-xl transition">
+        <h2 class="text-xl font-bold text-red-700 mb-2">
+          What is VulNews?
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          VulNews connects security researchers, developers, and enthusiasts
+          around real-world vulnerabilities and defensive tools.
+        </p>
+      </div>
+
+      <div
+        class="bg-white/90 backdrop-blur p-6 rounded-xl shadow-lg border border-red-100 hover:shadow-xl transition">
+        <h2 class="text-xl font-bold text-red-700 mb-2">
+          What is CVE?
+        </h2>
+        <p class="text-gray-700 leading-relaxed">
+          CVE (Common Vulnerabilities and Exposures) is the global standard for
+          identifying publicly disclosed cybersecurity issues.
+        </p>
+      </div>
     </div>
 
     
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-700">
-      <h2 class="text-xl font-bold text-red-700 mb-2">What is CVE?</h2>
-      <p class="text-gray-700">
-        CVE (Common Vulnerabilities and Exposures) is a global catalog of publicly
-        disclosed cybersecurity vulnerabilities. It helps professionals share
-        vulnerability information and respond faster to threats.
-      </p>
-    </div>
-
-    
-    <div *ngIf="loading" class="text-center text-gray-500">
-      Loading latest content...
+    <div *ngIf="loading" class="text-center py-10 text-gray-500">
+      ⏳ Loading latest content...
     </div>
 
     
     <div *ngIf="!loading">
-      <h3 class="text-lg font-bold text-gray-800 mb-3">Latest Articles</h3>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold text-gray-800">Latest Articles</h3>
+        <span class="text-sm text-gray-500">Fresh insights from the community</span>
+      </div>
 
-      <article *ngFor="let article of articles.slice(0,3)"
-        class="bg-white p-6 rounded-lg shadow hover:shadow-md transition mb-4">
+      <article
+        *ngFor="let article of articles.slice(0,3)"
+        class="group bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 mb-5 border border-transparent hover:border-red-200">
 
-        <h3 class="text-lg font-bold text-gray-800 mb-2">
+        <h4
+          class="text-lg font-bold text-gray-800 mb-2 group-hover:text-red-700 transition">
           {{ article.title }}
-        </h3>
+        </h4>
 
-        <p class="text-gray-600 mb-4">
-          {{ article.description | slice:0:120 }}...
+        <p class="text-gray-600 mb-4 leading-relaxed">
+          {{ article.content | slice:0:120 }}...
         </p>
 
-        <a class="text-red-700 font-semibold hover:underline cursor-pointer">
-          Read more →
+        <a
+          class="inline-flex items-center text-red-700 font-semibold hover:underline cursor-pointer"
+          [routerLink]="['/articles',article._id]"
+          >
+          Read more
+          <span class="ml-1 transition group-hover:translate-x-1">→</span>
         </a>
       </article>
 
@@ -56,14 +85,23 @@
 
     
     <div *ngIf="!loading">
-      <h3 class="text-lg font-bold text-gray-800 mb-3">Popular Tools</h3>
+      <h3 class="text-xl font-bold text-gray-800 mb-4">
+        Popular Tools
+      </h3>
 
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div *ngFor="let tool of tools.slice(0,4)"
-          class="bg-white p-4 rounded shadow border-l-4 border-red-700">
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div
+          *ngFor="let tool of tools.slice(0,4)"
+          style="cursor: pointer;"
+          class="bg-gradient-to-br from-white to-red-50 p-5 rounded-xl shadow hover:shadow-lg transition border border-red-100"
+          [routerLink]="['/tools',tool._id]"
+          >
 
-          <h4 class="font-bold text-gray-800">{{ tool.name }}</h4>
-          <p class="text-sm text-gray-600">
+          <h4 class="font-bold text-gray-800 mb-1">
+            {{ tool.name }}
+          </h4>
+
+          <p class="text-sm text-gray-600 leading-relaxed">
             {{ tool.description | slice:0:80 }}...
           </p>
         </div>
@@ -73,17 +111,20 @@
   </section>
 
   
-  <aside class="space-y-6">
+  <aside class="space-y-6 mt-16">
 
     
-    <div class="bg-white p-5 rounded-lg shadow border-t-4 border-red-700">
-      <h3 class="font-bold text-red-700 mb-3">Categories</h3>
+    <div
+      class="bg-white rounded-xl shadow-lg p-5 border border-red-100">
+      <h3 class="font-bold text-red-700 mb-4 tracking-wide">
+        Categories
+      </h3>
 
       <ul class="space-y-2 text-gray-700">
         <li *ngFor="let cat of categories">
-          <a class="hover:text-red-700 cursor-pointer"
-            [routerLink]="['/category',cat.title]"
-          >
+          <a
+            class="block px-3 py-1 rounded hover:bg-red-50 hover:text-red-700 transition"
+            [routerLink]="['/categories',cat.title]">
             {{ cat.title }}
           </a>
         </li>
@@ -91,13 +132,18 @@
     </div>
 
     
-    <div class="bg-white p-5 rounded-lg shadow border-t-4 border-red-700">
-      <h3 class="font-bold text-red-700 mb-3">Community Posts</h3>
+    <div
+      class="bg-white rounded-xl shadow-lg p-5 border border-red-100">
+      <h3 class="font-bold text-red-700 mb-4 tracking-wide">
+        Community Posts
+      </h3>
 
-      <ul class="space-y-3 text-gray-700 text-sm">
-        <li *ngFor="let post of posts"
-            class="hover:text-red-700 cursor-pointer">
-          💬 {{ post.title || (post.content) }}
+      <ul class="space-y-3 text-sm text-gray-700">
+        <li
+          *ngFor="let post of posts"
+          class="flex items-start gap-2 hover:text-red-700 transition cursor-pointer">
+          <span>💬</span>
+          <span>{{ post.title || post.content }}</span>
         </li>
       </ul>
 
@@ -107,10 +153,12 @@
     </div>
 
   </aside>
-
 </main>
 
-<footer class="bg-red-700 text-white text-center py-4 mt-10">
-  © 2026 VulNews — All rights reserved
+
+<footer class="mt-16 bg-gradient-to-r from-red-800 to-black text-white">
+  <div class="max-w-7xl mx-auto px-6 py-6 text-center text-sm">
+    © 2026 <span class="font-semibold">VulNews</span> — Securing knowledge, together.
+  </div>
 </footer>
 

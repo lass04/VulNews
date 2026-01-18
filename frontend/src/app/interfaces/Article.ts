@@ -1,12 +1,13 @@
-import { Category } from './Category';
-import { User } from "./User";
-
-export interface Article{
-    id:number,
-    title:String,
-    author:User,
-    content:String,
-    category:Category,
-    reactions:number,
-    date:Date
+export interface Article {
+  _id: string;
+  title: string;
+  author: string;        
+  category: string[];    
+  content: string;
+  reactions: number;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
 }
+
+

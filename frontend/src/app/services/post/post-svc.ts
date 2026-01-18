@@ -23,9 +23,8 @@ export class PostService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getPosts(): Observable<any[]> {
-    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
-      map(res => res.data || [])
-    );
+  getPosts() {
+    return this.http.get<{data:Post[]}>(`${this.BASE_URL}/getAll`);
   }
+
 }

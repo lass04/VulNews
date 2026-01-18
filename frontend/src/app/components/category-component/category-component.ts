@@ -1,14 +1,16 @@
+import { Tool } from './../../interfaces/Tool';
 import { CategoryService } from './../../services/category/category-svc';
 import { ToolService } from './../../services/tool/tool-svc';
 import { ArticleService } from './../../services/article/article-svc';
 import { VisitorNav } from '../visitor-nav/visitor-nav';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SlicePipe, CommonModule } from '@angular/common';
+import { Article } from '../../interfaces/Article';
 
 @Component({
   selector: 'app-category-component',
-  imports: [VisitorNav,SlicePipe,CommonModule],
+  imports: [VisitorNav, SlicePipe, CommonModule, RouterLink],
   templateUrl: './category-component.html',
   styleUrl: './category-component.css',
 })
@@ -22,8 +24,8 @@ export class CategoryComponent implements OnInit {
   )
   {}
 
-  articles:any[] = [];
-  tools:any[] = [];
+  articles:Article[] = [];
+  tools:Tool[] = [];
   currentCat:any = null;
   category:string|null = "";
 
@@ -37,12 +39,11 @@ export class CategoryComponent implements OnInit {
         this.currentCat = res.data._id;
 
         this.ArticleSvc.getArticlesByCatId(this.currentCat).subscribe(res => {
-          this.articles = Array.isArray(res) ? res[2] : Object.values(res);
+          this.articles = res.data;
         });
 
         this.ToolSvc.getToolsByCatId(this.currentCat).subscribe(res => {
-          this.tools = Array.isArray(res) ? res[2] : Object.values(res);
-          console.log(this.tools)
+          this.tools = res.data;
         });
         
       });

@@ -1,8 +1,13 @@
-export interface User{
-    id:number,
-    firstName:String,
-    lastName:String,
-    email:String,
-    password:String,
-    role:String
+export interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'user' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+
+  password?: string;
+  refreshToken?: string;
 }

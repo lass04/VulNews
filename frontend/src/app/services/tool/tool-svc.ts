@@ -1,3 +1,4 @@
+import { Tool } from './../../interfaces/Tool';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -22,18 +23,20 @@ export class ToolService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getTools(): Observable<any[]> {
-    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
-      map(res => res.data || [])
-    );
+  getTools() {
+    return this.http.get<{data: Tool[]}>(`${this.BASE_URL}/getAll`);
   }
 
   insertManyTools(data: any[]) {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
 
-  getToolsByCatId(cat:string):Observable<any[]>{
-    return this.http.get<any[]>(`${this.BASE_URL}/getByCategory/${cat}`);
+  getToolsByCatId(cat:string) {
+    return this.http.get<{data: Tool[]}>(`${this.BASE_URL}/getByCategory/${cat}`);
+  }
+
+  getToolById(id:string) {
+    return this.http.get<{data:Tool}>(`${this.BASE_URL}/getById/${id}`);
   }
 
 }

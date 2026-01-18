@@ -1,3 +1,4 @@
+import { Category } from './../../interfaces/Category';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -22,18 +23,16 @@ export class CategoryService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getCategories(limit:number): Observable<any[]> {
-    return this.http.get<any>(`${this.BASE_URL}/getAll?limit=${limit}`).pipe(
-      map(res => res.data || [])
-    );
+  getCategories(limit:number){
+    return this.http.get<{data:Category[]}>(`${this.BASE_URL}/getAll?limit=${limit}`);
   }
 
   insertManyCategories(data: any[]): Observable<any> {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
 
-  getCategoryByName(category:String):Observable<any>{
-    return this.http.get<any>(`${this.BASE_URL}/getByName?category=${category}`);
+  getCategoryByName(category:String){
+    return this.http.get<{data:Category}>(`${this.BASE_URL}/getByName?category=${category}`);
   }
   
 }

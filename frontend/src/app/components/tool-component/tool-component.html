@@ -1,0 +1,43 @@
+<app-visitor-nav></app-visitor-nav>
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+
+  <div *ngIf="loading" class="text-center py-20 text-gray-500">
+    ⏳ Loading tool...
+  </div>
+
+  <article *ngIf="!loading"
+    class="bg-white rounded-2xl shadow-xl p-10 border border-red-100">
+
+    <div class="flex items-center gap-5 mb-6">
+      <img
+        [src]="tool.image"
+        alt="tool logo"
+        class="w-16 h-16 rounded-lg object-contain bg-gray-100 p-2 shadow-sm">
+
+      <h1 class="text-4xl font-extrabold text-gray-800">
+        {{ tool.name }}
+      </h1>
+    </div>
+
+    <p class="text-gray-700 leading-relaxed mb-8">
+      {{ tool.description }}
+    </p>
+
+    <a
+      [href]="tool.link"
+      target="_blank"
+      class="inline-flex items-center gap-2 bg-red-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-800 transition">
+      Official Documentation
+      <span>→</span>
+    </a>
+
+  </article>
+
+</main>
+
+<footer class="mt-16 bg-gradient-to-r from-red-800 to-black text-white text-center py-6 text-sm">
+  © 2026 VulNews — All rights reserved
+</footer>
+
+

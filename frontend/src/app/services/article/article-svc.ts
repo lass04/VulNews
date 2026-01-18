@@ -1,3 +1,4 @@
+import { Article } from './../../interfaces/Article';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -22,18 +23,20 @@ export class ArticleService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getArticles(): Observable<any[]> {
-    return this.http.get<any>(`${this.BASE_URL}/getAll`).pipe(
-      map(res => res.data || [])
-    );
+  getArticles() {
+    return this.http.get<{data: Article[]}>(`${this.BASE_URL}/getAll`);
   }
 
   insertManyArticles(data: any[]) {
     return this.http.post(`${this.BASE_URL}/insertMany`, data);
   }
 
-  getArticlesByCatId(cat:string):Observable<any[]>{
-    return this.http.get<any[]>(`${this.BASE_URL}/getByCategory/${cat}`);
+  getArticlesByCatId(cat:string){
+    return this.http.get<{data: Article[]}>(`${this.BASE_URL}/getByCategory/${cat}`);
+  }
+
+  getArticleById(id:string){
+    return this.http.get<{data:Article}>(`${this.BASE_URL}/getById/${id}`);
   }
 
 }

@@ -3,5 +3,5 @@ export interface Cve {
     summary:string,
     published:string,
     lastModified:string,
-    cvss:number
+    cvss:number|null
 }

@@ -1,12 +1,14 @@
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import app from "./app.js";
+import { startNvdCron } from "./cron/nvd.cron.js";
 
 const startServer = async () => {
     
     try{
 
         await connectDB();
+        startNvdCron();
 
         app.on("Error",(err)=>{
             console.log(err)
@@ -18,11 +20,8 @@ const startServer = async () => {
 
 
     }catch(error){
-        return res.status(500).json({
-            success:false,
-            message:"Failed to start server",
-            error:error.message
-        });
+        console.error("Failed to start server:", error.message);
+        process.exit(1);
     }
 }
 

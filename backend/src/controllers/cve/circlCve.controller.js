@@ -4,6 +4,7 @@ const CIRCL_BASE = "https://cve.circl.lu/api";
 
 
 export const getCirclCVE = async (req, res) => {
+  
   try {
     const { cveId } = req.params;
 
@@ -17,8 +18,6 @@ export const getCirclCVE = async (req, res) => {
     }
 
     res.json({
-      success: true,
-      source: "CIRCL",
       data: {
         id: response.data.id,
         summary: response.data.summary,
@@ -45,9 +44,6 @@ export const getLatestCirclCVEs = async (req, res) => {
     const response = await axios.get(`${CIRCL_BASE}/last/${limit}`);
 
     res.json({
-      success: true,
-      source: "CIRCL",
-      count: response.data.length,
       data: response.data.map(cve => ({
         id: cve.id,
         summary: cve.summary,

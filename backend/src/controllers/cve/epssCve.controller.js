@@ -22,9 +22,6 @@ export const getLatestEpssCVEs = async (req, res) => {
     }));
 
     res.json({
-      success: true,
-      source: "EPSS",
-      count: formatted.length,
       data: formatted
     });
 

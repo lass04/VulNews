@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { ArticleService } from '../../services/article/article-svc';
+import { ArticleService } from '../../core/services/article/article-svc';
 import { VisitorNav } from './../visitor-nav/visitor-nav';
 import { Component } from '@angular/core';
 import { Article } from '../../interfaces/Article';

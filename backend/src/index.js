@@ -2,6 +2,7 @@ import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import app from "./app.js";
 import { startNvdCron } from "./cron/nvd.cron.js";
+import { startArticleCron } from "./cron/article.cron.js";
 
 const startServer = async () => {
     
@@ -9,6 +10,7 @@ const startServer = async () => {
 
         await connectDB();
         startNvdCron();
+        startArticleCron();
 
         app.on("Error",(err)=>{
             console.log(err)

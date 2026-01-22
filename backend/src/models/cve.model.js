@@ -7,7 +7,8 @@ const CveSchema = new Schema(
     published: { type: Date, required: true },
     lastModified: { type: Date, required: true },
     cvss: { type: Number, default: null },
-    source: { type: String, default: "NVD" }
+    source: { type: String, default: "NVD" },
+    new:{type:Boolean, default:true}
   },
   { timestamps: true }
 );

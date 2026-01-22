@@ -9,8 +9,7 @@ const articleSchema = new Schema({
         minlength:3
     },
     author:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
+        type:String,
         required:true
     },
     category:[
@@ -26,7 +25,6 @@ const articleSchema = new Schema({
         required:true,
         minlength:15
     },
-
     reactions:{
         type:Number,
         required:true

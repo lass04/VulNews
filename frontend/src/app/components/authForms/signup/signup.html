@@ -1,13 +1,11 @@
 <div class="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-black flex items-center justify-center relative">
 
-  
   <a [routerLink]="['/']"
      class="absolute top-6 left-6 flex items-center gap-2 text-white hover:text-red-200 transition">
     <img src="Logo.png" class="w-12 h-12 object-contain rounded-md shadow-sm bg-white">
     <span class="font-semibold">Home</span>
   </a>
 
-  
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 border border-red-100">
 
     <div class="text-center mb-8">
@@ -19,50 +17,60 @@
       </p>
     </div>
 
-    <form class="space-y-5">
+    <form class="space-y-5" (ngSubmit)="onSubmit()">
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            First Name
-          </label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
           <input
             type="text"
+            name="firstName"
+            [(ngModel)]="credentials.firstName"
+            required
             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-700">
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Last Name
-          </label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
           <input
             type="text"
+            name="lastName"
+            [(ngModel)]="credentials.lastName"
+            required
             class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-700">
         </div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input
           type="email"
+          name="email"
+          [(ngModel)]="credentials.email"
+          required
           class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-700">
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Password
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
         <input
           type="password"
+          name="password"
+          [(ngModel)]="credentials.password"
+          required
+          minlength="6"
           class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-red-700">
       </div>
 
       <button
-        class="w-full bg-red-700 text-white py-3 rounded-lg font-semibold hover:bg-red-800 transition">
-        Sign up
+        type="submit"
+        class="w-full bg-red-700 text-white py-3 rounded-lg font-semibold hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        [disabled]="loading">
+        {{ loading ? 'Signing up...' : 'Sign up' }}
       </button>
+
+      <p *ngIf="error" class="text-red-600 text-sm mt-2">{{ error }}</p>
+
     </form>
 
     <p class="text-center text-sm text-gray-500 mt-6">
@@ -74,4 +82,3 @@
 
   </div>
 </div>
-

@@ -35,9 +35,7 @@ const refresh = async (req,res) => {
     const accessToken = createAccessToken(findUser);
 
     res.status(200).json({
-        success:true,
-        message:"Refreshed access successfully",
-        AccessToken:accessToken
+        accessToken
     });
 
 }
@@ -79,13 +77,12 @@ const login = async (req,res) => {
 
         res.cookie("refreshToken",refreshToken,{
             httpOnly:true,
+            secure:true,
             sameSite:"strict"
         });
 
         res.status(200).json({
-            success:true,
-            message:"Successfully Logged In ",
-            AccessToken:accessToken
+            accessToken
         });
 
     }catch(error){
@@ -117,8 +114,48 @@ const logout = async (req,res) => {
     res.sendStatus(204);
 }
 
+const register = async (req,res) => {
+    
+    try{
+
+        const { firstName , lastName , email , password } = req.body;
+
+        if(!firstName || !lastName || !email || !password)
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            });
+
+        const findUser = await User.findOne({email:email});
+        if(findUser)
+            return res.status(400).json({
+                success:false,
+                message:"User already exist"
+            });
+
+        const registerUser = await User.create({
+            firstName,
+            lastName,
+            email,
+            password
+        });
+
+        res.status(201).json({
+            data:registerUser
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     refresh,
     login,
-    logout
+    logout,
+    register
 }

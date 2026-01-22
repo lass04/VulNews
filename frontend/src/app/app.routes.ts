@@ -1,4 +1,4 @@
-import { CveListComponent } from './components/cve-component/cve-component';
+import { CveComponent } from './components/cve-component/cve-component';
 import { Tool } from './interfaces/Tool';
 import { ArticleComponent } from './components/article-component/article-component';
 import { CategoryComponent } from './components/category-component/category-component';
@@ -29,7 +29,7 @@ export const routes: Routes = [
     { path: 'categories/:category', component:CategoryComponent},
     { path: 'articles/:id' , component:ArticleComponent},
     { path: 'tools/:id' , component:ToolComponent},
-    { path: 'cve',component:CveListComponent},
+    { path: 'cve',component:CveComponent},
     { path:'**',component:NotFound}
 
 ];

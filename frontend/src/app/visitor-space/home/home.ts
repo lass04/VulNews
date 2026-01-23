@@ -1,11 +1,13 @@
+import { Cve } from './../../interfaces/Cve';
+import { CveSvc } from '../../core/services/cve/cve-svc';
 import { Tool } from './../../interfaces/Tool';
 import { Post } from './../../interfaces/Post';
 import { Category } from './../../interfaces/Category';
 import { Article } from './../../interfaces/Article';
-import { ToolService } from './../../services/tool/tool-svc';
-import { PostService } from './../../services/post/post-svc';
-import { CategoryService } from './../../services/category/category-svc';
-import { ArticleService } from './../../services/article/article-svc';
+import { ToolService } from '../../core/services/tool/tool-svc';
+import { PostService } from '../../core/services/post/post-svc';
+import { CategoryService } from '../../core/services/category/category-svc';
+import { ArticleService } from '../../core/services/article/article-svc';
 
 import { VisitorNav } from '../../components/visitor-nav/visitor-nav';
 import { Component, OnInit } from '@angular/core';
@@ -24,6 +26,7 @@ export class Home implements OnInit {
   categories: Category[] = [];
   posts: Post[] = [];
   tools: Tool[] = [];
+  cves: Cve[] = [];
 
   loading = true;
 
@@ -31,7 +34,8 @@ export class Home implements OnInit {
     private articleService: ArticleService,
     private categoryService: CategoryService,
     private postService: PostService,
-    private toolService: ToolService
+    private toolService: ToolService,
+    private cveService: CveSvc
   ) {}
 
   ngOnInit(): void {
@@ -41,10 +45,10 @@ export class Home implements OnInit {
   loadData() {
     this.loading = true;
 
-    this.articleService.getArticles().subscribe(res => {
+    this.articleService.getLatestArticles("3").subscribe(res => {
       this.articles = res.data;
     });
-    this.categoryService.getCategories(10).subscribe(res => {
+    this.categoryService.getCategories(23).subscribe(res => {
       this.categories = res.data;
     });
     this.postService.getPosts().subscribe(res => {
@@ -52,6 +56,10 @@ export class Home implements OnInit {
     });
     this.toolService.getTools().subscribe(res => {
       this.tools = res.data;
+    });
+
+    this.cveService.getLatestNvd("3").subscribe(res => {
+      this.cves = res.data;
     });
 
     setTimeout(() => this.loading = false, 800);

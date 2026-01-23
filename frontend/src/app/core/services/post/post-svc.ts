@@ -1,4 +1,4 @@
-import { Post } from './../../interfaces/Post';
+import { Post } from '../../../interfaces/Post';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';

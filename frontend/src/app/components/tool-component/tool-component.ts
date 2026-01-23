@@ -1,8 +1,8 @@
 import { VisitorNav } from './../visitor-nav/visitor-nav';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ToolService } from '../../services/tool/tool-svc';
+import { ToolService } from '../../core/services/tool/tool-svc';
 import { Tool } from '../../interfaces/Tool';
 
 @Component({

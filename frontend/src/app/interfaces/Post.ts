@@ -3,8 +3,8 @@ import { User } from './User';
 
 export interface Post{
     id:number,
-    title:String,
-    content:String,
+    title:string,
+    content:string,
     category:Category,
     author:User,
     reactions:number,

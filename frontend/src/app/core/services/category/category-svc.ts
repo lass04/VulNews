@@ -1,4 +1,4 @@
-import { Category } from './../../interfaces/Category';
+import { Category } from '../../../interfaces/Category';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

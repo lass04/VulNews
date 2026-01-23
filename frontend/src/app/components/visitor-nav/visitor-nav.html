@@ -21,12 +21,16 @@
           </a>
           <a href="#"
              class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
-            Contact
+            Community
+          </a>
+          <a href="#"
+             class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
+            Help
           </a>
         </div>
 
         
-        <div class="hidden md:flex space-x-3">
+        <div *ngIf="!connected" class="hidden md:flex space-x-3">
           <a [routerLink]="['/login']"
              class="px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-white/20 transition">
             Login
@@ -37,7 +41,19 @@
           </a>
         </div>
 
-        
+      
+        <div *ngIf="connected" class="hidden md:flex space-x-3">
+          <p
+             class="bg-green px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-green transition">
+            Connected
+          </p>
+          <a (click)="logout()"
+             class="px-3 py-2 rounded-md text-sm font-medium bg-red-700 hover:bg-red-800 transition" 
+             style="cursor: pointer;">
+            Disconnect
+          </a>
+      </div>
+      
         <div class="md:hidden">
           <button id="mobile-menu-btn" class="text-white focus:outline-none">
             
@@ -51,31 +67,7 @@
       </div>
     </div>
 
-    
-    <div id="mobile-menu" class="hidden md:hidden bg-black/90">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <a href="#"
-           class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 hover:text-red-200 transition">
-          Home
-        </a>
-        <a href="#"
-           class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 hover:text-red-200 transition">
-          CVEs
-        </a>
-        <a href="#"
-           class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/10 hover:text-red-200 transition">
-          Contact
-        </a>
-        <a [routerLink]="['/login']"
-           class="block px-3 py-2 rounded-md text-base font-medium bg-white/10 hover:bg-white/20 transition">
-          Login
-        </a>
-        <a [routerLink]="['/signup']"
-           class="block px-3 py-2 rounded-md text-base font-medium bg-red-700 hover:bg-red-800 transition">
-          Sign Up
-        </a>
-      </div>
-    </div>
+
   </nav>
 </header>
 

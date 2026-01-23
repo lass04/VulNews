@@ -1,7 +1,7 @@
 import { Tool } from './../../interfaces/Tool';
-import { CategoryService } from './../../services/category/category-svc';
-import { ToolService } from './../../services/tool/tool-svc';
-import { ArticleService } from './../../services/article/article-svc';
+import { CategoryService } from '../../core/services/category/category-svc';
+import { ToolService } from '../../core/services/tool/tool-svc';
+import { ArticleService } from '../../core/services/article/article-svc';
 import { VisitorNav } from '../visitor-nav/visitor-nav';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';

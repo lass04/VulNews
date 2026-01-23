@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createArticle, deleteArticle, updateArticle, getArticles, insertMany, getByCategory, getById} 
+import { createArticle, deleteArticle, updateArticle, getArticles, insertMany, getByCategory, getById, getLatestArticles} 
 from "../controllers/article.controller.js";
 import { adminOnly } from "../middlewares/auth.middleware.js";
 
@@ -15,5 +15,6 @@ router.route("/getAll").get(getArticles);
 router.route("/insertMany").post(insertMany);
 router.route("/getByCategory/:id").get(getByCategory);
 router.route("/getById/:id").get(getById);
+router.route("/getLatest").get(getLatestArticles);
 
 export default router;

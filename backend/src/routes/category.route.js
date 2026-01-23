@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCategory, deleteCategory, updateCategory, getCategories, insertMany, getCategoryByName} 
+import { createCategory, deleteCategory, updateCategory, getCategories, insertMany, getCategoryByName, getById} 
 from "../controllers/category.controller.js";
 import { adminOnly } from "../middlewares/auth.middleware.js";
 
@@ -14,6 +14,6 @@ router.route("/update/:id").patch(adminOnly,updateCategory);
 router.route("/getAll").get(getCategories);
 router.route("/insertMany").post(insertMany);
 router.route("/getByName").get(getCategoryByName);
-
+router.route("/getById/:id").get(getById);
 
 export default router;

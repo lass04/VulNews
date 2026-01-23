@@ -1,4 +1,4 @@
-import { Tool } from './../../interfaces/Tool';
+import { Tool } from '../../../interfaces/Tool';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';

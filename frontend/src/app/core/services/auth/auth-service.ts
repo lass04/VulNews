@@ -1,56 +1,83 @@
+import { jwtDecode } from "jwt-decode";
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Subject, tap } from 'rxjs';
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
+
 export class AuthService {
 
-  private readonly api = 'http://localhost:3000/api/auth';
+  private readonly BASE_URL = 'http://localhost:2004/auth';
 
-  private accessToken: string | null = null;
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-  // used by interceptor to coordinate refresh
-  public isRefreshing = false;
-  public token$ = new BehaviorSubject<string | null>(null);
+  LoggedUser?:string|null;
+  isAuthenticated =new BehaviorSubject<boolean>(false);
+  $refreshToken = new Subject<boolean>;
 
-  constructor(private http: HttpClient) {}
-
-  /* ---------- TOKEN MANAGEMENT ---------- */
-
-  setToken(token: string) {
-    this.accessToken = token;
-    this.token$.next(token);
+  constructor(){
+    this.$refreshToken.subscribe(()=>this.refresh());
   }
 
-  getToken(): string | null {
-    return this.accessToken;
+  signup(data:any){
+    return this.http.post<any>(`${this.BASE_URL}/register`,data).pipe(
+      tap((data:any)=>{
+        this.LoggedUser = data.email;
+      }
+    ));
   }
 
-  clearToken() {
-    this.accessToken = null;
-    this.token$.next(null);
+  login(data:any){
+    return this.http.post<any>(`${this.BASE_URL}/login`,data).pipe(
+      tap((tokens:any)=>this.doLoginUser(data,tokens)));
   }
 
-  /* ---------- AUTH REQUESTS ---------- */
-
-  login(credentials: { email: string; password: string }) {
-    return this.http.post<any>(`${this.api}/login`, credentials).pipe(
-      tap(res => this.setToken(res.accessToken))
-    );
+  doLoginUser(data:any,token:any){
+    this.LoggedUser = data.email;
+    this.storeToken(token);
+    this.isAuthenticated.next(true);
   }
 
-  signup(data: any) {
-    return this.http.post(`${this.api}/register`, data);
+  logout(){
+    localStorage.removeItem("token");
+    this.LoggedUser=null;
+    this.isAuthenticated.next(false);
+    return this.http.post<any>(`${this.BASE_URL}/logout`,{});
   }
 
-  refresh() {
-    return this.http.post<any>(`${this.api}/refresh`, {}).pipe(
-      tap(res => this.setToken(res.accessToken))
-    );
+  storeToken(token:any){
+    localStorage.setItem("token",token);
   }
 
-  logout() {
-    this.clearToken();
-    return this.http.post(`${this.api}/logout`, {});
+  getToken(){
+    return localStorage.getItem("token");
   }
+
+  refresh(){
+    
+    return this.http.post<any>(`${this.BASE_URL}/refresh`,{},{ withCredentials:true}).pipe(
+      tap((AccToken:any)=> {
+        this.isAuthenticated.next(true);
+        this.storeToken(AccToken)
+      }
+      )
+    )
+  }
+
+  isTokenExpired(){
+
+    const token = this.getToken();
+    if(!token) return true;
+
+    const decoded = jwtDecode(token);
+    if(!decoded.exp) return true;
+
+    var exp = decoded.exp * 1000;
+    const now = new Date().getTime();
+
+    return exp < now;
+  }
+
 }

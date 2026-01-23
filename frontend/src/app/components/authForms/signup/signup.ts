@@ -24,7 +24,7 @@ export class Signup {
   constructor(private auth: AuthService, private router: Router) {}
 
   onSubmit() {
-    // basic validation
+    
     if (!this.credentials.firstName || !this.credentials.lastName || !this.credentials.email || !this.credentials.password) {
       return;
     }
@@ -35,7 +35,7 @@ export class Signup {
     this.auth.signup(this.credentials).subscribe({
       next: () => {
         this.loading = false;
-        // Redirect to login after successful signup
+        
         this.router.navigate(['/login']);
       },
       error: (err) => {

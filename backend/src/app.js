@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import userRouter from "./routes/user.route.js";
 import articleRouter from "./routes/article.route.js";
@@ -15,7 +16,7 @@ const app = express();
 // Parse Request to JSON
 
 app.use(express.json());
-
+app.use(cookieParser());
 
 // Cors Configuration
 

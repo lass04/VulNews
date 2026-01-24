@@ -64,7 +64,6 @@ export class Home implements OnInit {
 
     setTimeout(() => this.loading = false, 800);
 
-    console.log(this.articles,this.tools,this.categories);
   }
 
 }

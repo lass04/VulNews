@@ -13,13 +13,11 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  LoggedUser?:string|null;
-  isAuthenticated =new BehaviorSubject<boolean>(false);
-  $refreshToken = new Subject<boolean>;
+  public LoggedUser?:string|null;
+  public isAuthenticated =new BehaviorSubject<boolean>(false);
+  
 
-  constructor(){
-    this.$refreshToken.subscribe(()=>this.refresh());
-  }
+  constructor(){}
 
   signup(data:any){
     return this.http.post<any>(`${this.BASE_URL}/register`,data).pipe(
@@ -31,7 +29,11 @@ export class AuthService {
 
   login(data:any){
     return this.http.post<any>(`${this.BASE_URL}/login`,data).pipe(
-      tap((tokens:any)=>this.doLoginUser(data,tokens)));
+      tap((token:any)=>{
+        this.doLoginUser(data,JSON.stringify(token.accessToken));
+      }
+      ));
+      
   }
 
   doLoginUser(data:any,token:any){

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './../../core/services/auth/auth-service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-module";
 
 @Component({
@@ -13,17 +13,17 @@ import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-m
 
 export class VisitorNav implements OnInit{
 
-  constructor(private authSvc:AuthService,private router:Router){}
+  private router = inject(Router);
+  private auth = inject(AuthService);
 
-  connected : boolean= false;
+  connected?:boolean;
 
-  ngOnInit() {
-    this.connected = this.authSvc.isAuthenticated.value;
-    console.log(this.authSvc.isAuthenticated.value);
+  ngOnInit() { 
+    this.connected = !this.auth.isTokenExpired() && !!this.auth.getToken();
   }
 
   logout(){
-    this.authSvc.logout().subscribe(()=>{
+    this.auth.logout().subscribe(()=>{
       this.connected = false;
       this.router.navigate(['/']);
     });

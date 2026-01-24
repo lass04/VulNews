@@ -5,12 +5,12 @@ import { createRefreshToken , createAccessToken } from "../utils/jwt.js";
 
 const refresh = async (req,res) => {
 
-    const token = req.cookies.refreshtoken;
+    const token = req.cookies.refreshToken;
 
     if(!token)
-        return res.status(400).json({
+        return res.status(401).json({
             success:false,
-            message:"No Token"
+            message:"No Refresh Token"
         });
 
     const findUser = await User.findOne({refreshToken:token});
@@ -25,7 +25,7 @@ const refresh = async (req,res) => {
         jwt.verify(token,process.env.REFRESH_TOKEN_SECRET);
 
     }catch(error){
-        return res.status(403).json({
+        return res.status(401).json({
             success:false,
             message:"False Token",
             error:error.message

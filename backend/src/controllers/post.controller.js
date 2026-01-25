@@ -112,9 +112,12 @@ const getPosts = async (req,res) => {
 
     try{
         
+        const limit = req.query.limit;
+
         const posts = await Post.find()
        .populate('author', 'firstName lastName email')   
-       .populate('reactions', 'firstName lastName email'); ;
+       .populate('reactions', 'firstName lastName email')
+       .limit(limit);
 
         res.status(200).json({
             data:posts
@@ -133,6 +136,8 @@ const LikedPosts = async (req,res) => {
     
     try{
 
+        const limit = req.query.limit;
+
         const id = req.user.userId;
         if(!id)
             return res.status(401).json({
@@ -142,7 +147,8 @@ const LikedPosts = async (req,res) => {
 
         const likedPosts = await Post.find({ reactions: id }) 
        .populate('author', 'firstName lastName email')   
-       .populate('reactions', 'firstName lastName email'); 
+       .populate('reactions', 'firstName lastName email')
+       .limit(limit);
 
         
         res.status(200).json({

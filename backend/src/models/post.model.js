@@ -19,10 +19,12 @@ const postSchema = new Schema({
         ref:"User",
         required:true
     },
-    reactions:{
-        type:Number, 
-        required:true
+    reactions:[
+        {
+        type:mongoose.Schema.Types.ObjectId, 
+        ref:"User"
     }
+    ]
 },
 {
     timestamps:true

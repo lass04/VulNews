@@ -242,11 +242,8 @@ const getLatestArticles = async (req,res) => {
     }
 }
 
-
-
-
-
 const fetchArticlesAndStore = async () => {
+
   console.log("🟢 VulNews Cron: Starting article fetch...");
 
   try {
@@ -283,24 +280,24 @@ const fetchArticlesAndStore = async () => {
       }
     );
 
-    const articles = data?.articles ?? [];
-    if (!articles.length) {
+      const articles = data?.articles ?? [];
+       if (!articles.length) {
       console.log("ℹ️ No articles returned from NewsAPI");
       return;
-    }
+      }
     console.log(`📰 Fetched ${articles.length} articles`);
 
     /* ───────────────────────
        Initialize Cohere V2 client
     ─────────────────────── */
-    const cohere = new CohereClientV2({ token: COHERE_API_KEY });
+      const cohere = new CohereClientV2({ token: COHERE_API_KEY });
 
     /* ───────────────────────
        Classify & format articles using chat
     ─────────────────────── */
-    const formattedArticles = [];
+     const formattedArticles = [];
 
-    for (const article of articles) {
+     for (const article of articles) {
       const text = `${article.title}. ${article.description ?? ""}`;
 
       try {
@@ -349,13 +346,13 @@ const fetchArticlesAndStore = async () => {
     /* ───────────────────────
        Insert into MongoDB
     ─────────────────────── */
-    const inserted = await Article.insertMany(formattedArticles, { ordered: false });
-    console.log(`✅ Inserted ${inserted.length} new articles`);
-  } catch (error) {
+      const inserted = await Article.insertMany(formattedArticles, { ordered: false });
+      console.log(`✅ Inserted ${inserted.length} new articles`);
+   } catch (error) {
     console.error("🔥 VulNews Cron Error:", error.message);
-  } finally {
-    console.log("🔵 VulNews Cron: Task completed\n");
-  }
+   } finally {
+      console.log("🔵 VulNews Cron: Task completed\n");
+   }
 };
 
 

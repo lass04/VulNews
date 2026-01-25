@@ -11,6 +11,7 @@ import authRouter from "./routes/auth.route.js";
 import cveRouter from "./routes/cve.route.js";
 import toolRouter from "./routes/tool.route.js";
 
+
 const app = express();
 
 // Parse Request to JSON
@@ -38,5 +39,6 @@ app.use("/comments",commentRouter);
 app.use("/auth",authRouter);
 app.use("/cve",cveRouter);
 app.use("/tools",toolRouter);
+
 
 export default app;

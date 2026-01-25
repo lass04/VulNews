@@ -111,8 +111,10 @@ const updatePost = async (req,res) => {
 const getPosts = async (req,res) => {
 
     try{
-
-        const posts = await Post.find();
+        
+        const posts = await Post.find()
+       .populate('author', 'firstName lastName email')   
+       .populate('reactions', 'firstName lastName email'); ;
 
         res.status(200).json({
             data:posts
@@ -127,9 +129,58 @@ const getPosts = async (req,res) => {
     }
 }
 
+const LikedPosts = async (req,res) => {
+    
+    try{
+
+        const id = req.user.userId;
+        if(!id)
+            return res.status(401).json({
+                success:false,
+                message:"Not authorized"
+            });
+
+        const likedPosts = await Post.find({ reactions: id }) 
+       .populate('author', 'firstName lastName email')   
+       .populate('reactions', 'firstName lastName email'); 
+
+        
+        res.status(200).json({
+            data: likedPosts
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
+const insertMany = async (req,res) => {
+    
+    try{
+
+        const insertMany = await Post.insertMany(req.body);
+        res.status(201).json({
+            insertions:insertMany
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createPost,
     deletePost,
     updatePost,
-    getPosts
+    getPosts,
+    LikedPosts,
+    insertMany
 }

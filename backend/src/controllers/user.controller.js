@@ -128,9 +128,28 @@ const getUsers = async (req,res) => {
     }
 } 
 
+const insertMany = async (req,res) => {
+    
+    try{
+
+        const insertMany = await User.insertMany(req.body);
+        res.status(201).json({
+            insertions:insertMany
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createUser,
     deleteUser,
     updateUser,
+    insertMany,
     getUsers
 }

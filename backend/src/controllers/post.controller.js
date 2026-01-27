@@ -182,11 +182,50 @@ const insertMany = async (req,res) => {
     }
 }
 
+const LikePost = async (req,res) => {
+    
+    try{
+
+        const { postId } = req.body;
+        const userId = req.params.id;
+        
+        if(!userId || !postId)
+            return res.status(400).json({
+                success:false,
+                message:"Check userId in params and post in body"
+            });
+
+
+        const post = await Post.findByIdAndUpdate(
+            postId,
+            { $addToSet: { reactions: userId } },
+            { new: true }
+            );
+
+
+        if(!post)
+            return res.status(404).json({
+                success:false,
+                message:"Post Not found"
+            });
+            
+        res.status(200).json({success:true});
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createPost,
     deletePost,
     updatePost,
     getPosts,
     LikedPosts,
-    insertMany
+    insertMany,
+    LikePost
 }

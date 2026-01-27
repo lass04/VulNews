@@ -9,31 +9,39 @@ let isRefreshing = false;
 let refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+   const EXCLUDED_ROUTES = [
+    '/auth/login',
+    '/auth/register'
+  ];
+
+  if (EXCLUDED_ROUTES.some(url => req.url.includes(url))) {
+    return next(req);
+  }
+
   const router = inject(Router);
   const auth = inject(AuthService);
   const token = auth.getToken();
   
   const reqClone = req.clone({
     setHeaders: {
-      Authorization: `Bearer ${token?.replace(/"/g, '') || ''}`
+      Authorization: `Bearer ${token}`
     },
     withCredentials: true
   });
 
-  console.log("Interceptor for : ",req.url);
+  console.log()
+
 
   return next(reqClone).pipe(
     
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && auth.isTokenExpired()) {
+
+      if (error.status === 401 ) {
         console.log("Token Expired");
-        return handle401(req, next, auth, router);
         
-      }
-      
-      if (error.status === 401) {
-        auth.logout();
-        router.navigate(['/']);
+        return handle401(reqClone, next, auth, router);
+        
       }
       
       return throwError(() => error);
@@ -65,7 +73,7 @@ function handle401(
         
         const newReq = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${newToken?.replace(/"/g, '') || ''}`
+            Authorization: `Bearer ${newToken}`
           },
           withCredentials: true
         });
@@ -89,7 +97,7 @@ function handle401(
         
         const newReq = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${token?.replace(/"/g, '') || ''}`
+            Authorization: `Bearer ${token}`
           },
           withCredentials: true
         });

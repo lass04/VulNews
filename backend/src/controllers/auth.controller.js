@@ -52,15 +52,15 @@ const login = async (req,res) => {
                 message:"All fields are required"
             });
 
-        const findUser = await User.findOne({email:email});
-        if(!findUser)
-            return res.status(401).json({
+        const user = await User.findOne({email:email});
+        if(!user)
+            return res.status(404).json({
                 succes:false,
                 message:"No user with these credentials"
             });
 
             
-        const match = await findUser.comparePassword(password);
+        const match = await user.comparePassword(password);
         if(!match)
             return res.status(401).json({
                 succes:false,
@@ -68,21 +68,23 @@ const login = async (req,res) => {
             });
 
 
-        const refreshToken = createRefreshToken(findUser);
-        const accessToken = createAccessToken(findUser);
+        const refreshToken = createRefreshToken(user);
+        const accessToken = createAccessToken(user);
 
 
-        findUser.refreshToken = refreshToken;
-        await findUser.save();
+        user.refreshToken = refreshToken;
+        await user.save();
 
         res.cookie("refreshToken",refreshToken,{
             httpOnly:true,
-            secure:true,
-            sameSite:"strict"
+            secure:false,
+            sameSite:"lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
         res.status(200).json({
-            accessToken
+            accessToken,
+            user
         });
 
     }catch(error){
@@ -96,7 +98,8 @@ const login = async (req,res) => {
 
 const logout = async (req,res) => {
 
-    const token = req.cookies.refreshToken;
+    const token = req.cookies.refreshToken;console.log(token);
+
     if(!token)
         return res.status(403).json({
             success:false,

@@ -26,7 +26,8 @@ const userSchema = new Schema({
         minlength:8
     },
     refreshToken:{
-        type:String
+        type:String,
+        select:false
     },
     role:{
         type:String,

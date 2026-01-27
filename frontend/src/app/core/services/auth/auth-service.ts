@@ -1,7 +1,8 @@
+import { User } from './../../../interfaces/User';
 import { jwtDecode } from "jwt-decode";
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Subject, tap } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +18,10 @@ export class AuthService {
   public isAuthenticated =new BehaviorSubject<boolean>(false);
   
 
-  constructor(){}
+  constructor(){
+    //if(this.isTokenExpired())
+      //this.removeToken();
+  }
 
   signup(data:any){
     return this.http.post<any>(`${this.BASE_URL}/register`,data).pipe(
@@ -28,25 +32,36 @@ export class AuthService {
   }
 
   login(data:any){
-    return this.http.post<any>(`${this.BASE_URL}/login`,data).pipe(
-      tap((token:any)=>{
-        this.doLoginUser(data,JSON.stringify(token.accessToken));
+    return this.http.post<any>(`${this.BASE_URL}/login`,data,{withCredentials:true}).pipe(
+      tap((resData:any)=>{
+        this.doLoginUser(data,resData);
       }
       ));
       
   }
 
-  doLoginUser(data:any,token:any){
+  doLoginUser(data:any,resData:any){
     this.LoggedUser = data.email;
-    this.storeToken(token);
+    this.storeUser(resData.user);
+    this.storeToken(resData.accessToken);
     this.isAuthenticated.next(true);
   }
 
   logout(){
+    return this.http.post<any>(`${this.BASE_URL}/logout`,{}).pipe(
+      tap(()=>{
+
+        this.removeToken();
+        this.removeUser();
+
+        this.LoggedUser=null;
+        this.isAuthenticated.next(false);
+        this.router.navigate(['/']);
+      }));
+  }
+
+  removeToken(){
     localStorage.removeItem("token");
-    this.LoggedUser=null;
-    this.isAuthenticated.next(false);
-    return this.http.post<any>(`${this.BASE_URL}/logout`,{});
   }
 
   storeToken(token:any){
@@ -57,12 +72,28 @@ export class AuthService {
     return localStorage.getItem("token");
   }
 
+  storeUser(user:User){
+    localStorage.setItem("user",JSON.stringify(user));
+  }
+
+  getUser(){
+    const user = localStorage.getItem("user");
+    
+    if(user){
+      console.log(JSON.parse(user))
+      return JSON.parse(user);
+  }}
+
+  removeUser(){
+    localStorage.removeItem("user");
+  }
+
   refresh(){
     
     return this.http.post<any>(`${this.BASE_URL}/refresh`,{},{ withCredentials:true}).pipe(
-      tap((AccToken:any)=> {
+      tap((token:any)=> {
         this.isAuthenticated.next(true);
-        this.storeToken(AccToken)
+        this.storeToken(token.accessToken);
       }
       )
     )

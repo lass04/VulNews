@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { User } from "../models/user.model.js";
 
 const createUser = async (req,res) => {
@@ -132,7 +133,19 @@ const insertMany = async (req,res) => {
     
     try{
 
-        const insertMany = await User.insertMany(req.body);
+        const users = req.body;
+
+        const hashedUsers = await Promise.all( users.map(async(user)=> {
+
+            const hashedpassword = await bcrypt.hash(user.password,10);
+            return {
+                ...user,
+                password : hashedpassword
+            }
+        })
+    );
+
+        const insertMany = await User.insertMany(hashedUsers);
         res.status(201).json({
             insertions:insertMany
         });

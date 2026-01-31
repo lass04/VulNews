@@ -30,8 +30,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     withCredentials: true
   });
 
-  console.log()
-
 
   return next(reqClone).pipe(
     

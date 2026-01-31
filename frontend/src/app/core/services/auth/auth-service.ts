@@ -80,9 +80,9 @@ export class AuthService {
     const user = localStorage.getItem("user");
     
     if(user){
-      console.log(JSON.parse(user))
       return JSON.parse(user);
-  }}
+   }
+  }
 
   removeUser(){
     localStorage.removeItem("user");

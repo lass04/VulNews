@@ -1,3 +1,4 @@
+import { authChildGuard } from './core/guards/auth-guard';
 import { CveComponent } from './components/cve-component/cve-component';
 import { ArticleComponent } from './components/article-component/article-component';
 import { CategoryComponent } from './components/category-component/category-component';
@@ -14,7 +15,7 @@ export const routes: Routes = [
      loadChildren: () => import('./visitor-space/visitor-space-module').then(m => m.VisitorSpaceModule)
     },
 
-    { path: 'user',
+    { path: 'user', canActivateChild:[authChildGuard],
      loadChildren: () => import('./user-space/user-space-module').then(m => m.UserSpaceModule)
     },
 

@@ -49,7 +49,7 @@ export class Home implements OnInit {
     this.articleService.getLatestArticles("3").subscribe(res => {
       this.articles = res.data;
     });
-    this.categoryService.getCategories(23).subscribe(res => {
+    this.categoryService.getCategories(10).subscribe(res => {
       this.categories = res.data;
     });
     this.postService.getPosts().subscribe(res => {

@@ -3,13 +3,13 @@
 <section class="min-h-screen bg-gray-50 py-12 relative bg-gradient-to-br from-gray-900 via-black to-red-900 text-white">
   <div class="max-w-4xl mx-auto px-4">
     
-    <!-- Header -->
+    
     <div class="mb-10">
       <h1 class="text-3xl font-extrabold">Community <span class="text-red-700">Feed</span></h1>
       <p class="text-gray-300">Share insights, ask questions, and connect with other researchers.</p>
     </div>
 
-    <!-- New Post Form -->
+    
     <div class="bg-white rounded-xl shadow-md border border-red-100 p-6 mb-8">
       <textarea
         [(ngModel)]="newPostContent"
@@ -28,19 +28,19 @@
       </div>
     </div>
 
-    <!-- Loading State -->
+    
     <div *ngIf="loading" class="text-center py-10">
       <div class="animate-spin radial-progress text-red-700">⏳</div>
       <p class="text-gray-500 mt-2">Fetching community vibes...</p>
     </div>
 
-    <!-- Posts Feed -->
+    
     <div *ngIf="!loading" class="space-y-6">
       <article
         *ngFor="let post of posts"
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow"
       >
-        <!-- Post Header -->
+        
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-red-700 flex items-center justify-center text-white font-bold">
@@ -53,17 +53,28 @@
           </div>
         </div>
 
-        <!-- Post Content -->
-        <p class="text-gray-700 leading-relaxed mb-4">
+        <button
+                        *ngIf="canDeletePost(post)"
+                        (click)="deletePost(post)"
+                        class="ml-195 text-red-500 hover:text-red-700 hover:bg-red-50 rounded p-1 transition flex-shrink-0"
+                        title="Delete comment"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+
+        
+        <p class="text-black leading-relaxed mb-4">
           {{ post.content }}
         </p>
 
-        <!-- Post Actions -->
+       
         <div class="flex items-center gap-6 border-t pt-4">
           <button
             (click)="toggleLike(post)"
             class="flex items-center gap-2 group transition"
-            [ngClass]="post.likedByMe ? 'text-red-600' : 'text-gray-500 hover:text-red-600'"
+            [ngClass]="post.likedByMe ? 'text-red-600' : 'text-black hover:text-red-600'"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -79,12 +90,12 @@
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            <span class="font-medium">{{ post.reactions.length }}</span>
+            <span class="font-medium text-black">{{ post.reactions.length }}</span>
           </button>
 
           <button
             (click)="toggleComments(post)"
-            class="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition"
+            class="flex items-center gap-2 text-black hover:text-blue-600 transition"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
@@ -139,7 +150,7 @@
                         <h5 class="font-semibold text-gray-800 text-sm">
                           {{ comment.author.firstName + ' ' + comment.author.lastName || 'Anonymous' }}
                         </h5>
-                        <p class="text-gray-700 text-sm mt-1">{{ comment.content }}</p>
+                        <p class="text-black text-sm mt-1">{{ comment.content }}</p>
                       </div>
                       
                       <button
@@ -159,7 +170,7 @@
               </div>
             </div>
 
-            <!-- No Comments Message -->
+            
             <div *ngIf="!post.comments || post.comments.length === 0" class="text-center py-6 text-gray-500">
               No comments yet. Be the first to comment!
             </div>
@@ -167,7 +178,7 @@
         </div>
       </article>
 
-      <!-- Empty State -->
+      
       <div *ngIf="posts.length === 0" class="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
         <p class="text-gray-500">The feed is empty. Be the first to start a conversation!</p>
       </div>

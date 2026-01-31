@@ -61,7 +61,7 @@ export class Community implements OnInit {
     this.isSubmitting = true;
     const newPost = { 
       content: this.newPostContent, 
-      authorName: 'Current User' 
+      author: this.currentUser._id
     };
     
     this.PostSvc.createPost(newPost).subscribe({
@@ -162,4 +162,34 @@ export class Community implements OnInit {
     return comment.author._id === this.currentUser._id || 
            this.currentUser.role === 'admin';
   }
+
+  deletePost(post: Post) {
+    if (!post._id) return;
+    
+    // Confirm deletion
+    if (!confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+    
+    this.PostSvc.deletePost(post._id).subscribe({
+      next: () => {
+        // Remove comment from the post's comments array
+        const index = this.posts.findIndex(p => p._id === post._id);
+        if (index !== undefined && index > -1 && this.posts) {
+          this.posts.splice(index, 1);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to delete post:', err);
+        alert('Failed to delete post. Please try again.');
+      }
+    });
+  }
+
+  canDeletePost(post: Post): boolean {
+    // User can delete their own comments or admins can delete any comment
+    return post.author._id === this.currentUser._id || 
+           this.currentUser.role === 'admin';
+  }
+
 }

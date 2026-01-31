@@ -15,7 +15,7 @@ export class UserService {
   }
 
   updateUser(id: string, data: any) {
-    return this.http.patch(`${this.BASE_URL}/update/${id}`, data);
+    return this.http.patch<{data:User}>(`${this.BASE_URL}/update/${id}`, data);
   }
 
   deleteUser(id: string) {

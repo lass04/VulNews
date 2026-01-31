@@ -26,6 +26,13 @@
             Community
           </a>
           <a 
+            *ngIf="connected"
+             href="/user/profile"
+             class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
+            My Profile
+          </a>
+          
+          <a 
              *ngIf="!connected"
              href="/login"
              class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
@@ -52,10 +59,6 @@
           <p
              class="bg-green px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-green transition">
             Welcome {{currentUser?.firstName}}
-          </p>
-          <p *ngIf="currentUser && currentUser.role==='admin'"
-             class="bg-green px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-green transition">
-            Admin Mode
           </p>
           <a (click)="logout()"
              class="px-3 py-2 rounded-md text-sm font-medium bg-red-700 hover:bg-red-800 transition" 

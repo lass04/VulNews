@@ -1,0 +1,333 @@
+<app-navbar></app-navbar>
+
+<section class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-red-900 py-12">
+  <div class="max-w-6xl mx-auto px-4">
+    
+   
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+     
+      <div class="h-32 bg-gradient-to-r from-red-700 via-red-800 to-black"></div>
+      
+     
+      <div class="relative px-6 pb-6">
+        
+        <div class="absolute -top-16 left-6">
+          <div class="w-32 h-32 rounded-full bg-gradient-to-br from-red-700 to-red-900 border-4 border-white flex items-center justify-center shadow-xl">
+            <span class="text-white text-4xl font-bold">{{ getInitials() }}</span>
+          </div>
+        </div>
+        
+       
+        <div class="pt-20 flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <h1 class="text-3xl font-bold text-gray-900">
+                {{ currentUser.firstName }} {{ currentUser.lastName }}
+              </h1>
+              <span 
+                class="px-3 py-1 text-xs font-semibold rounded-full border"
+                [ngClass]="getRoleBadgeClass()"
+              >
+                {{ currentUser.role | uppercase }}
+              </span>
+            </div>
+            <p class="text-gray-600 mb-1">{{ currentUser.email }}</p>
+            <p class="text-sm text-gray-500">
+              <span class="inline-flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Member since {{ formatDate(currentUser.createdAt) }}
+              </span>
+            </p>
+          </div>
+          
+          
+          <button
+            (click)="toggleEditMode()"
+            class="flex items-center gap-2 px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg transition font-medium"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            {{ isEditMode ? 'Cancel' : 'Edit Profile' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+   
+    <div *ngIf="isEditMode" class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            First Name
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="editForm.firstName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+            placeholder="First Name"
+          />
+        </div>
+        
+      
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Last Name
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="editForm.lastName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+            placeholder="Last Name"
+          />
+        </div>
+        
+        
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
+            [(ngModel)]="editForm.email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
+            placeholder="email@example.com"
+          />
+        </div>
+      </div>
+      
+      
+      <div class="flex justify-end gap-3 mt-6">
+        <button
+          (click)="toggleEditMode()"
+          class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition font-medium"
+          [disabled]="isUpdating"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="updateProfile()"
+          class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg transition font-medium disabled:opacity-50"
+          [disabled]="isUpdating"
+        >
+          {{ isUpdating ? 'Updating...' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Total Posts</p>
+            <p class="text-3xl font-bold text-gray-900 mt-1">{{ userStats.totalPosts }}</p>
+          </div>
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Total Comments</p>
+            <p class="text-3xl font-bold text-gray-900 mt-1">{{ userStats.totalComments }}</p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-pink-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Likes Received</p>
+            <p class="text-3xl font-bold text-gray-900 mt-1">{{ userStats.totalLikes }}</p>
+          </div>
+          <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-700">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Member For</p>
+            <p class="text-3xl font-bold text-gray-900 mt-1">{{ userStats.memberSince }}</p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      
+      <div class="border-b border-gray-200">
+        <nav class="flex -mb-px">
+          <button
+            (click)="switchTab('posts')"
+            class="px-6 py-4 text-sm font-medium transition border-b-2"
+            [ngClass]="activeTab === 'posts' 
+              ? 'border-red-700 text-red-700' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          >
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              My Posts ({{ userStats.totalPosts }})
+            </div>
+          </button>
+          
+          <button
+            (click)="switchTab('comments')"
+            class="px-6 py-4 text-sm font-medium transition border-b-2"
+            [ngClass]="activeTab === 'comments' 
+              ? 'border-red-700 text-red-700' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          >
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+              My Comments ({{ userStats.totalComments }})
+            </div>
+          </button>
+
+          <button
+            (click)="switchTab('activity')"
+            class="px-6 py-4 text-sm font-medium transition border-b-2"
+            [ngClass]="activeTab === 'activity' 
+              ? 'border-red-700 text-red-700' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          >
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Activity
+            </div>
+          </button>
+        </nav>
+      </div>
+
+      
+      <div class="p-6">
+        
+        <div *ngIf="activeTab === 'posts'">
+          <div *ngIf="loading" class="text-center py-12">
+            <div class="animate-spin inline-block w-8 h-8 border-4 border-red-700 border-t-transparent rounded-full"></div>
+            <p class="text-gray-500 mt-4">Loading posts...</p>
+          </div>
+
+          <div *ngIf="!loading && userPosts.length === 0" class="text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="text-gray-500 text-lg">You haven't posted anything yet</p>
+            <p class="text-gray-400 text-sm mt-2">Share your thoughts with the community!</p>
+          </div>
+
+          <div *ngIf="!loading && userPosts.length > 0" class="space-y-4">
+            <div *ngFor="let post of userPosts" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+              <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                  <h3 class="font-semibold text-gray-900 mb-1">{{ post.title || 'Untitled Post' }}</h3>
+                  <p class="text-gray-700 text-sm line-clamp-2">{{ post.content }}</p>
+                </div>
+                <button
+                  (click)="deletePost(post)"
+                  class="ml-4 text-red-500 hover:text-red-700 hover:bg-red-50 rounded p-2 transition"
+                  title="Delete post"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="flex items-center gap-4 text-sm text-gray-500 mt-3 pt-3 border-t">
+                <span class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  {{ post.reactions.length || 0 }} likes
+                </span>
+                <span class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  {{ post.comments?.length || 0 }} comments
+                </span>
+                <span class="ml-auto">{{ formatDate(post.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div *ngIf="activeTab === 'comments'">
+          <div *ngIf="loading" class="text-center py-12">
+            <div class="animate-spin inline-block w-8 h-8 border-4 border-red-700 border-t-transparent rounded-full"></div>
+            <p class="text-gray-500 mt-4">Loading comments...</p>
+          </div>
+
+          <div *ngIf="!loading && userComments.length === 0" class="text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <p class="text-gray-500 text-lg">You haven't commented yet</p>
+            <p class="text-gray-400 text-sm mt-2">Join the discussion!</p>
+          </div>
+
+          <div *ngIf="!loading && userComments.length > 0" class="space-y-4">
+            <div *ngFor="let comment of userComments" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+              <p class="text-gray-700 mb-3">{{ comment.content }}</p>
+              <div class="text-sm text-gray-500">
+                <span>{{ formatDate(comment.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div *ngIf="activeTab === 'activity'">
+          <div class="space-y-4">
+            
+            <div class="text-center py-12">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <p class="text-gray-500 text-lg">Activity timeline coming soon</p>
+              <p class="text-gray-400 text-sm mt-2">Track all your interactions in one place</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

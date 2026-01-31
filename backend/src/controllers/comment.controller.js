@@ -1,33 +1,46 @@
 import { Comment } from "../models/comment.model.js";
+import { Post } from "../models/post.model.js";
+import { User } from "../models/user.model.js";
 
 const createComment = async (req,res) => {
     
     try{
 
-        const { author, content, post, reactions } = req.body;
+        const { author, content , post} = req.body;
 
-        if(!author || !content || !post || !reactions)
+        if(!author || !content || !post )
             return res.status(400).json({
                 success:false,
-                message:"All fields are required"
+                message:"All fields are required (author,content,post)"
             });
 
-        const findComment = await Comment.findOne({title:title});
-        if(findComment)
-            return res.status(400).json({
+
+        const findAuthor = await User.findOne({_id:author});
+        if(!findAuthor)
+            return res.status(404).json({
                 success:false,
-                message:"Comment already exist"
+                message:"Author not found"
+            });
+
+        const findPost = await Post.findOne({_id:post});
+        if(!findPost)
+            return res.status(404).json({
+                success:false,
+                message:"Post not found"
             });
 
         const createComment = await Comment.create({
             author,
             content,
-            post,
-            reactions
+            post
         });
 
+        const populatedComment = await Comment.findById(createComment._id)
+        .populate("author");
+
+
         res.status(201).json({
-            comment:createComment
+            data:populatedComment
         });
 
     }catch(error){
@@ -110,11 +123,19 @@ const updateComment = async (req,res) => {
     }
 }
 
-const getComments = async (req,res) => {
+const getPostComments = async (req,res) => {
 
     try{
 
-        const comments = await Comment.find();
+        const postId = req.params.id;
+        if(!postId)
+            return res.status(400).json({
+                success:false,
+                message:"PostId required in params"
+            });
+
+        const comments = await Comment.find({post:postId})
+        .populate('author');
 
         res.status(200).json({
             data:comments
@@ -129,9 +150,31 @@ const getComments = async (req,res) => {
     }
 }
 
+const insertMany = async (req,res) => {
+    
+    try{
+
+        const comments = req.body;
+
+        const insertMany = await Comment.insertMany(comments);
+
+        res.status(200).json({
+            insertions:insertMany
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createComment,
     deleteComment,
     updateComment,
-    getComments
+    getPostComments,
+    insertMany
 }

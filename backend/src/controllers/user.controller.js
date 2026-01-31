@@ -159,10 +159,42 @@ const insertMany = async (req,res) => {
     }
 }
 
+const getUserById = async (req,res) => {
+    
+    try{
+
+        const id = req.params.id;
+        if(!id)
+            return res.status(400).json({
+                success:false,
+                message:"No userId in req params"
+            });
+
+        const findUser = await User.findById(id);
+        if(!findUser)
+            return res.status(404).json({
+                success:false,
+                message:"User not found"
+            });
+
+        res.status(200).json({
+            data:findUser
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error",
+            error:error.message
+        })
+    }
+}
+
 export {
     createUser,
     deleteUser,
     updateUser,
     insertMany,
-    getUsers
+    getUsers,
+    getUserById
 }

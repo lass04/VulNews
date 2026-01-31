@@ -1,5 +1,6 @@
 import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
+import { Comment } from "../models/comment.model.js";
 
 const createPost = async (req,res) => {
     
@@ -115,8 +116,8 @@ const getPosts = async (req,res) => {
         const limit = req.query.limit;
 
         const posts = await Post.find()
-       .populate('author', 'firstName lastName email')   
-       .populate('reactions', 'firstName lastName email')
+       .populate('author')
+       .populate('reactions')
        .limit(limit);
 
         res.status(200).json({

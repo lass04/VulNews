@@ -1,11 +1,9 @@
 import { CveComponent } from './components/cve-component/cve-component';
-import { Tool } from './interfaces/Tool';
 import { ArticleComponent } from './components/article-component/article-component';
 import { CategoryComponent } from './components/category-component/category-component';
 import { NotFound } from './components/not-found/not-found';
 import { Signup } from './components/authForms/signup/signup';
 import { Login } from './components/authForms/login/login';
-import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { ToolComponent } from './components/tool-component/tool-component';
 

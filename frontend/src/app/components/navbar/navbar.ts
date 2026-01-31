@@ -32,7 +32,7 @@ export class Navbar implements OnInit{
     this.auth.logout().subscribe(()=>{
       this.connected = false;
     });
-    } 
+  }
   }
 
 

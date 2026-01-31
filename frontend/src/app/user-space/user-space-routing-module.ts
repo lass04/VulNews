@@ -1,9 +1,9 @@
-import { Home } from './home/home';
+import { Community } from './community/community';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path:'', component:Home}
+  { path:'community', component:Community}
 ];
 
 @NgModule({

@@ -1,8 +1,9 @@
+import { Navbar } from './../navbar/navbar';
 import { Tool } from './../../interfaces/Tool';
 import { CategoryService } from '../../core/services/category/category-svc';
 import { ToolService } from '../../core/services/tool/tool-svc';
 import { ArticleService } from '../../core/services/article/article-svc';
-import { VisitorNav } from '../visitor-nav/visitor-nav';
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SlicePipe, CommonModule } from '@angular/common';
@@ -10,7 +11,7 @@ import { Article } from '../../interfaces/Article';
 
 @Component({
   selector: 'app-category-component',
-  imports: [VisitorNav, SlicePipe, CommonModule, RouterLink],
+  imports: [Navbar, SlicePipe, CommonModule, RouterLink],
   templateUrl: './category-component.html',
   styleUrl: './category-component.css',
 })

@@ -1,3 +1,4 @@
+import { Navbar } from './../../components/navbar/navbar';
 import { Cve } from './../../interfaces/Cve';
 import { CveSvc } from '../../core/services/cve/cve-svc';
 import { Tool } from './../../interfaces/Tool';
@@ -8,8 +9,6 @@ import { ToolService } from '../../core/services/tool/tool-svc';
 import { PostService } from '../../core/services/post/post-svc';
 import { CategoryService } from '../../core/services/category/category-svc';
 import { ArticleService } from '../../core/services/article/article-svc';
-
-import { VisitorNav } from '../../components/visitor-nav/visitor-nav';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-module";
@@ -17,9 +16,10 @@ import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-m
 @Component({
   selector: 'app-visitor-home',
   standalone: true,
-  imports: [CommonModule, VisitorNav, AdminSpaceRoutingModule],
+  imports: [CommonModule, Navbar, AdminSpaceRoutingModule],
   templateUrl: './home.html'
 })
+
 export class Home implements OnInit {
 
   articles: Article[] = [];
@@ -43,6 +43,7 @@ export class Home implements OnInit {
   }
 
   loadData() {
+    
     this.loading = true;
 
     this.articleService.getLatestArticles("3").subscribe(res => {

@@ -1,4 +1,4 @@
-import { VisitorNav } from './../visitor-nav/visitor-nav';
+import { Navbar } from './../navbar/navbar';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,7 +7,7 @@ import { Tool } from '../../interfaces/Tool';
 
 @Component({
   selector: 'app-tool-component',
-  imports: [VisitorNav,CommonModule],
+  imports: [Navbar,CommonModule],
   templateUrl: './tool-component.html',
   styleUrl: './tool-component.css',
 })

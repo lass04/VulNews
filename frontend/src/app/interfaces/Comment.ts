@@ -2,10 +2,11 @@ import { Post } from './Post';
 import { User } from './User';
 
 export interface Comment{
-    id:number,
-    content:String,
-    author:User,
-    post:Post,
-    reactions:number,
-    date:Date
+    _id:string;
+    content:String;
+    author:User;
+    post:Post;
+    createdAt:string;
+    updatedAt:string;
+    __v?:number
 }

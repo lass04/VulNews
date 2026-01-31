@@ -1,3 +1,4 @@
+import { Comment } from './../../../interfaces/Comment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -9,7 +10,7 @@ export class CommentService {
   constructor(private http: HttpClient) {}
 
   createComment(data: any) {
-    return this.http.post(`${this.BASE_URL}/create`, data);
+    return this.http.post<{data:Comment}>(`${this.BASE_URL}/create`, data);
   }
 
   updateComment(id: string, data: any) {
@@ -20,7 +21,8 @@ export class CommentService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getComments() {
-    return this.http.get(`${this.BASE_URL}/getAll`);
+  getPostComments(postId:string) {
+    return this.http.get<{data:Comment[]}>(`${this.BASE_URL}/getPostComments/${postId}`);
   }
+
 }

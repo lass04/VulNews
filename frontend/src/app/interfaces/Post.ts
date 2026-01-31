@@ -1,12 +1,18 @@
-import { Category } from './Category';
+import { Comment } from './Comment';
 import { User } from './User';
 
 export interface Post{
-    id:number,
+    _id: string,
     title:string,
     content:string,
-    category:Category,
     author:User,
-    reactions:number,
-    date:Date
+    reactions:string[],
+    comments?:Comment[],
+    createdAt: string;
+    updatedAt: string;
+    __v?: number;
+    likedByMe?:boolean
+
+    showComments?: boolean;
+    newComment?: string;
 }

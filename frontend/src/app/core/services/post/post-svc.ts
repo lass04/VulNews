@@ -27,4 +27,12 @@ export class PostService {
     return this.http.get<{data:Post[]}>(`${this.BASE_URL}/getAll`);
   }
 
+  getLikedPosts(userId:string){
+    return this.http.get<{data:Post[]}>(`${this.BASE_URL}/LikedPosts`);
+  }
+
+  LikePost(userId:string,postId:string){
+    return this.http.post<any>(`${this.BASE_URL}/LikePost/${userId}`,{postId:postId});
+  }
+
 }

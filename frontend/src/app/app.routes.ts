@@ -1,3 +1,4 @@
+import { Tools } from './components/tools-component/tools-component';
 import { authChildGuard } from './core/guards/auth-guard';
 import { CveComponent } from './components/cve-component/cve-component';
 import { ArticleComponent } from './components/article-component/article-component';
@@ -29,6 +30,7 @@ export const routes: Routes = [
     { path: 'articles/:id' , component:ArticleComponent},
     { path: 'tools/:id' , component:ToolComponent},
     { path: 'cve',component:CveComponent},
+    { path: 'tools', component:Tools},
     { path:'**',component:NotFound}
 
 ];

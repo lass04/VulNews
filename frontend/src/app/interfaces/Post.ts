@@ -6,7 +6,7 @@ export interface Post{
     title:string,
     content:string,
     author:User,
-    reactions:string[],
+    reactions:User[],
     comments?:Comment[],
     createdAt: string;
     updatedAt: string;

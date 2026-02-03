@@ -35,4 +35,8 @@ export class PostService {
     return this.http.post<any>(`${this.BASE_URL}/LikePost/${userId}`,{postId:postId});
   }
 
+  UnlikePost(userId:string,postId:string){
+    return this.http.post<any>(`${this.BASE_URL}/UnlikePost/${userId}`,{postId:postId});
+  }
+
 }

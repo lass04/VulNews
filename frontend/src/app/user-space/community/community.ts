@@ -39,14 +39,14 @@ export class Community implements OnInit {
         this.posts = res.data;
         this.posts.forEach(post => {
           // Check if current user has liked this post
-          post.likedByMe = post.reactions.includes(this.currentUser._id);
+          post.reactions.forEach(ele=>{post.likedByMe = ele._id===this.currentUser._id});
           
           // Initialize showComments flag
           post.showComments = false;
           
           // Load comments for each post
           this.CommentSvc.getPostComments(post._id).subscribe(
-            (res) => {post.comments = res.data;console.log(res.data)}
+            (res) => {post.comments = res.data}
           );
         });
         this.loading = false;
@@ -80,35 +80,33 @@ export class Community implements OnInit {
     const wasLiked = post.likedByMe;
     
     // Optimistically update UI
-    post.likedByMe = !post.likedByMe;
+    
     
     if (wasLiked) {
       // Remove like
-      const index = post.reactions.indexOf(this.currentUser._id);
+      const index = post.reactions.indexOf(this.currentUser);
       if (index > -1) {
-        post.reactions.splice(index, 1);
+        this.PostSvc.UnlikePost(this.currentUser._id,post._id).subscribe({
+          next: () => {
+                   post.reactions.splice(index, 1);
+                   post.likedByMe = !post.likedByMe;
+          },
+          error: () => {alert("Cannot Unlike post")}
+        });
+ 
       }
     } else {
-      // Add like
-      post.reactions.push(this.currentUser._id);
+      this.PostSvc.LikePost(this.currentUser._id,post._id).subscribe({
+          next: () => {
+                   post.reactions.push(this.currentUser);
+                   post.likedByMe = !post.likedByMe;
+          },
+          error: () => {alert("Cannot Like post")}
+        });
+      
     }
     
-    // Send request to server
-    this.PostSvc.LikePost(this.currentUser._id, post._id).subscribe({
-      error: () => {
-        // Revert on error
-        post.likedByMe = wasLiked;
-        
-        if (wasLiked) {
-          post.reactions.push(this.currentUser._id);
-        } else {
-          const index = post.reactions.indexOf(this.currentUser._id);
-          if (index > -1) {
-            post.reactions.splice(index, 1);
-          }
-        }
-      }
-    });
+    
   }
 
   toggleComments(post: Post) {

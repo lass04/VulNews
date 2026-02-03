@@ -23,7 +23,7 @@ export class CategoryService {
     return this.http.delete(`${this.BASE_URL}/delete/${id}`);
   }
 
-  getCategories(limit:number){
+  getCategories(limit?:number){
     return this.http.get<{data:Category[]}>(`${this.BASE_URL}/getAll?limit=${limit}`);
   }
 

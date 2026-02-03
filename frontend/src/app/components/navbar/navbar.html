@@ -25,13 +25,11 @@
              class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
             Community
           </a>
-          <a 
-            *ngIf="connected"
-             href="/user/profile"
+          <a href="/tools"
              class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-white/10 hover:text-red-200 transition">
-            My Profile
+            Tools
           </a>
-          
+    
           <a 
              *ngIf="!connected"
              href="/login"
@@ -57,8 +55,10 @@
         <div *ngIf="connected" class="hidden md:flex space-x-3">
           
           <p
-             class="bg-green px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-green transition">
-            Welcome {{currentUser?.firstName}}
+             class="bg-green px-3 py-2 rounded-md text-sm font-medium bg-white/10 hover:bg-green transition"
+             [routerLink]="['/user/profile']"
+             style="cursor: pointer;">
+            My profile
           </p>
           <a (click)="logout()"
              class="px-3 py-2 rounded-md text-sm font-medium bg-red-700 hover:bg-red-800 transition" 

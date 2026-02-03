@@ -1,3 +1,4 @@
+import { AuthService } from './../../core/services/auth/auth-service';
 import { Navbar } from './../../components/navbar/navbar';
 import { Cve } from './../../interfaces/Cve';
 import { CveSvc } from '../../core/services/cve/cve-svc';
@@ -27,7 +28,7 @@ export class Home implements OnInit {
   posts: Post[] = [];
   tools: Tool[] = [];
   cves: Cve[] = [];
-
+  connected=false;
   loading = true;
 
   constructor(
@@ -35,11 +36,13 @@ export class Home implements OnInit {
     private categoryService: CategoryService,
     private postService: PostService,
     private toolService: ToolService,
-    private cveService: CveSvc
+    private cveService: CveSvc,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.connected = !this.authService.isTokenExpired();
   }
 
   loadData() {

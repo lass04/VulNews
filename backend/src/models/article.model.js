@@ -24,10 +24,6 @@ const articleSchema = new Schema({
         type:String,
         required:true,
         minlength:15
-    },
-    reactions:{
-        type:Number,
-        required:true
     }
 
 },

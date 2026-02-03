@@ -9,7 +9,7 @@ const router = new Router();
 // Routes Definition
 
 router.route("/create").post(adminOnly,createCategory);
-router.route("/delete").delete(adminOnly,deleteCategory);
+router.route("/delete/:id").delete(adminOnly,deleteCategory);
 router.route("/update/:id").patch(adminOnly,updateCategory);
 router.route("/getAll").get(getCategories);
 router.route("/insertMany").post(insertMany);

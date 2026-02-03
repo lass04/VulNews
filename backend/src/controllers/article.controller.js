@@ -1,8 +1,8 @@
 import { Article } from "../models/article.model.js";
 import { User } from "../models/user.model.js";
 import { Category } from "../models/category.model.js";
-import axios from "axios";
 import { CohereClientV2 } from "cohere-ai";
+import Parser from 'rss-parser';
 
 const createArticle = async (req,res) => {
     
@@ -242,120 +242,203 @@ const getLatestArticles = async (req,res) => {
     }
 }
 
+const CYBERSECURITY_FEEDS = [
+  {
+    url: 'https://www.securityweek.com/feed/',
+    name: 'SecurityWeek'
+  },
+  {
+    url: 'https://feeds.feedburner.com/TheHackersNews',
+    name: 'The Hacker News'
+  },
+  {
+    url: 'https://krebsonsecurity.com/feed/',
+    name: 'Krebs on Security'
+  },
+  {
+    url: 'https://www.bleepingcomputer.com/feed/',
+    name: 'BleepingComputer'
+  },
+  {
+    url: 'https://threatpost.com/feed/',
+    name: 'Threatpost'
+  },
+  {
+    url: 'https://www.darkreading.com/rss.xml',
+    name: 'Dark Reading'
+  },
+];
+
 const fetchArticlesAndStore = async () => {
 
-  console.log("🟢 VulNews Cron: Starting article fetch...");
-
+  console.log('🟢 VulNews Cron: Starting article fetch...');
+  
   try {
-    const { NEWS_API_KEY, COHERE_API_KEY } = process.env;
-
-    if (!NEWS_API_KEY || !COHERE_API_KEY) {
-      console.error("❌ Missing API keys (NEWS_API_KEY / COHERE_API_KEY)");
+    const { COHERE_API_KEY } = process.env;
+    
+    if (!COHERE_API_KEY) {
+      console.error('❌ Missing COHERE_API_KEY');
       return;
     }
 
+    
     const categories = await Category.find().lean();
     if (!categories.length) {
-      console.log("⚠️ No categories found. Aborting cron task.");
+      console.log('⚠️ No categories found. Aborting cron task.');
       return;
     }
 
-    const categoryNames = categories.map(c => c.name);
-    const categoryMap = Object.fromEntries(categories.map(c => [c.name, c._id]));
-    console.log(`📂 Loaded ${categories.length} categories`);
+    const categoryNames = categories.map(c => c.title);
+    const categoryMap = Object.fromEntries(categories.map(c => [c.title, c._id]));
+    console.log(`📂 Loaded ${categories.length} categories:`, categoryNames);
 
-    /* ───────────────────────
-       Fetch cybersecurity news
-    ─────────────────────── */
-    const { data } = await axios.get(
-      "https://newsapi.org/v2/everything",
-      {
-        params: {
-          q: "cybersecurity OR vulnerability OR hacking OR security breach",
-          sortBy: "publishedAt",
-          language: "en",
-          pageSize: 20,
-          apiKey: NEWS_API_KEY,
-        },
+    
+    const parser = new Parser({
+      customFields: {
+        item: ['content:encoded', 'dc:creator']
       }
-    );
+    });
 
-      const articles = data?.articles ?? [];
-       if (!articles.length) {
-      console.log("ℹ️ No articles returned from NewsAPI");
-      return;
-      }
-    console.log(`📰 Fetched ${articles.length} articles`);
+    const allArticles = [];
 
-    /* ───────────────────────
-       Initialize Cohere V2 client
-    ─────────────────────── */
-      const cohere = new CohereClientV2({ token: COHERE_API_KEY });
-
-    /* ───────────────────────
-       Classify & format articles using chat
-    ─────────────────────── */
-     const formattedArticles = [];
-
-     for (const article of articles) {
-      const text = `${article.title}. ${article.description ?? ""}`;
-
+    for (const feed of CYBERSECURITY_FEEDS) {
       try {
-        // Chat-based classification prompt
+        console.log(`🔍 Fetching from ${feed.name}...`);
+        const parsedFeed = await parser.parseURL(feed.url);
+        
+        
+        const articles = parsedFeed.items.slice(0, 5).map(item => ({
+          title: item.title,
+          author: item.creator || item['dc:creator'] || feed.name,
+          description: item.contentSnippet || item.summary || '',
+          content: item.content || item['content:encoded'] || item.contentSnippet || '',
+          url: item.link,
+          publishedAt: item.pubDate || item.isoDate,
+          source: feed.name
+        }));
+
+        allArticles.push(...articles);
+        console.log(`  ✓ Fetched ${articles.length} articles`);
+        
+      } catch (error) {
+        console.warn(`  ⚠️ Failed to fetch ${feed.name}:`, error.message);
+      }
+    }
+
+    if (!allArticles.length) {
+      console.log('ℹ️ No articles fetched from any feed');
+      return;
+    }
+
+    console.log(`📰 Total articles fetched: ${allArticles.length}`);
+
+    // ==========================================
+    // DEDUPLICATE BY TITLE
+    // ==========================================
+    const uniqueArticles = [];
+    const seenTitles = new Set();
+
+    for (const article of allArticles) {
+      const titleKey = article.title.toLowerCase().substring(0, 50);
+      if (!seenTitles.has(titleKey)) {
+        seenTitles.add(titleKey);
+        uniqueArticles.push(article);
+      }
+    }
+
+    console.log(`📊 Unique articles after deduplication: ${uniqueArticles.length}`);
+
+    // ==========================================
+    // CLASSIFY WITH COHERE
+    // ==========================================
+    const cohere = new CohereClientV2({ token: COHERE_API_KEY });
+    const formattedArticles = [];
+    
+    for (const article of uniqueArticles) {
+      // Check if article already exists
+      const exists = await Article.findOne({ title: article.title });
+      if (exists) {
+        console.log(`⏭️ Skipping duplicate: ${article.title.substring(0, 50)}...`);
+        continue;
+      }
+
+      const text = `${article.title}. ${article.description}`;
+      
+      try {
+        // Classify article
         const response = await cohere.chat({
-          model: "command-a-03-2025", // free-tier chat model
+          model: 'command-r-08-2024',
           messages: [
             {
-              role: "user",
-              content: `Classify this text into one of the following categories: ${categoryNames.join(
-                ", "
-              )}. Text: "${text}"`,
+              role: 'user',
+              content: `You are a cybersecurity expert. Classify this article into ONE of these categories: ${categoryNames.join(', ')}.
+              Article: "${text}"
+              Respond with ONLY the category name, nothing else.`,
             },
           ],
         });
 
-        // Cohere v2 returns choices array
-        const predictedLabelRaw = response.choices?.[0]?.message?.content || "";
+        const predictedLabelRaw = response.message?.content?.[0]?.text || '';
         const predictedLabel = categoryNames.find(cat =>
-          predictedLabelRaw.toLowerCase().includes(cat?.toLowerCase())
+          predictedLabelRaw.toLowerCase().includes(cat.toLowerCase())
         );
-        const categoryId = categoryMap[predictedLabel];
 
-        if (!categoryId) continue;
+        if (!predictedLabel) {
+          console.warn(`⚠️ No category match for: ${article.title.substring(0, 50)}...`);
+          continue;
+        }
+
+        const categoryId = categoryMap[predictedLabel];
 
         formattedArticles.push({
           title: article.title,
-          author: article.author || article.source?.name || "Unknown",
+          author: article.author,
           category: [categoryId],
-          content: article.description || article.content || "No content available",
-          reactions: 0,
+          content: article.content || article.description || 'No content available',
         });
-        
+
+        console.log(`✓ Classified "${article.title.substring(0, 40)}..." → ${predictedLabel}`);
+
       } catch (error) {
-        console.warn(
-          `⚠️ Classification failed: ${article.title}, error: ${error.message}`
-        );
+        console.warn(`⚠️ Classification failed for "${article.title.substring(0, 40)}...":`, error.message);
       }
+
+      // Rate limiting - wait 1 second between Cohere calls (free tier)
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     if (!formattedArticles.length) {
-      console.log("ℹ️ Articles fetched but none classified");
+      console.log('ℹ️ No articles classified successfully');
       return;
     }
 
-    /* ───────────────────────
-       Insert into MongoDB
-    ─────────────────────── */
-      const inserted = await Article.insertMany(formattedArticles, { ordered: false });
-      console.log(`✅ Inserted ${inserted.length} new articles`);
-   } catch (error) {
-    console.error("🔥 VulNews Cron Error:", error.message);
-   } finally {
-      console.log("🔵 VulNews Cron: Task completed\n");
-   }
+    // ==========================================
+    // INSERT INTO DATABASE
+    // ==========================================
+
+    try {
+      const inserted = await Article.insertMany(formattedArticles, { 
+        ordered: false // Continue even if some fail
+      });
+      console.log(`✅ Successfully inserted ${inserted.length} new articles`);
+    } catch (error) {
+      
+      if (error.code === 11000) {
+        const insertedCount = error.insertedDocs?.length || 0;
+        console.log(`✅ Inserted ${insertedCount} articles (${formattedArticles.length - insertedCount} duplicates skipped)`);
+      } else {
+        throw error;
+      }
+    }
+
+
+  } catch (error) {
+    console.error('🔥 VulNews Cron Error:', error.message);
+    console.error(error.stack);
+  } finally {
+    console.log('🔵 VulNews Cron: Task completed\n');
+  }
 };
-
-
 
 
 export {

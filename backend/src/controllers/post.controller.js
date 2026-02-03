@@ -7,7 +7,7 @@ const createPost = async (req,res) => {
     try{
 
         const { title , content, author, reactions} = req.body;
-        if(!title || !content || !author || !reactions)
+        if( !content || !author )
             return res.status(400).json({
                 success:false,
                 message:"All fields are required (Author field is a MongoDB Id)"
@@ -27,8 +27,11 @@ const createPost = async (req,res) => {
             reactions
         });
 
+        let populatedPost = await Post.findOne({_id:createPost._id})
+        .populate("author").populate("reactions");
+
         res.status(201).json({
-            post:createPost
+            data:populatedPost
         });
 
     }catch(error){
@@ -106,6 +109,35 @@ const updatePost = async (req,res) => {
             message:"Internal Server error",
             error:error.message
         }); 
+    }
+}
+
+const getPost = async (req,res) => {
+    try{
+
+        const id = req.params.id;
+        if(!id)
+            return res.status(400).json({
+                success:false,
+                message:"No postId in req params"
+            });
+
+        const post = await Post.findById(id).populate('author').populate('reactions');
+        if(!post)
+            return res.status(404).json({
+                succes:false,
+                message:"Post not found"
+            });
+        
+        res.status(200).json({data:post});
+
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error",
+            error:error.message
+        })
     }
 }
 
@@ -221,12 +253,53 @@ const LikePost = async (req,res) => {
     }
 }
 
+const UnlikePost = async (req,res) => {
+    
+    try{
+
+        const { postId } = req.body;
+        const userId = req.params.id;
+        
+        if(!userId || !postId)
+            return res.status(400).json({
+                success:false,
+                message:"Check userId in params and post in body"
+            });
+
+
+        const post = await Post.findByIdAndUpdate(
+          postId,
+         { $pull: { reactions: userId } },
+         { new: true }
+         );
+
+
+
+        if(!post)
+            return res.status(404).json({
+                success:false,
+                message:"Post Not found"
+            });
+            
+        res.status(200).json({success:true});
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server error",
+            error:error.message
+        });
+    }
+}
+
 export {
     createPost,
     deletePost,
     updatePost,
     getPosts,
+    getPost,
     LikedPosts,
     insertMany,
-    LikePost
+    LikePost,
+    UnlikePost
 }

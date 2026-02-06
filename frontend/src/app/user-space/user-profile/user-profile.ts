@@ -86,8 +86,6 @@ export class Profile implements OnInit {
       }
     });
     
-    // Load user's comments (you'll need to add this API endpoint)
-    // For now, we'll load all comments and filter
     this.loadUserComments();
   }
 

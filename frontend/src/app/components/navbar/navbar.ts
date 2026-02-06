@@ -1,15 +1,14 @@
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth/auth-service';
 import { Component, OnInit, inject } from '@angular/core';
-import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-module";
 import { User } from '../../interfaces/User';
 
 @Component({
   selector: 'app-navbar',
-  imports: [AdminSpaceRoutingModule,CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css', 
+  styleUrl: './navbar.css' 
 })
 
 export class Navbar implements OnInit{
@@ -32,7 +31,7 @@ export class Navbar implements OnInit{
     this.auth.logout().subscribe(()=>{
       this.connected = false;
     });
-  }
+    }
   }
 
 

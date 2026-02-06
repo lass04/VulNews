@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { AuthService } from './../../core/services/auth/auth-service';
 import { Navbar } from './../../components/navbar/navbar';
 import { Cve } from './../../interfaces/Cve';
@@ -12,12 +13,11 @@ import { CategoryService } from '../../core/services/category/category-svc';
 import { ArticleService } from '../../core/services/article/article-svc';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminSpaceRoutingModule } from "../../admin-space/admin-space-routing-module";
 
 @Component({
   selector: 'app-visitor-home',
   standalone: true,
-  imports: [CommonModule, Navbar, AdminSpaceRoutingModule],
+  imports: [CommonModule, Navbar, RouterModule],
   templateUrl: './home.html'
 })
 

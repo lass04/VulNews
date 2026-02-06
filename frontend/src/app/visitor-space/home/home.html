@@ -63,7 +63,7 @@
         *ngFor="let cve of cves.slice(0,3)"
         class="group bg-white rounded-xl shadow-md hover:shadow-xl transition p-6 mb-5 border border-transparent hover:border-red-200
         hover:shadow-[0_0_20px_rgba(0,255,128,0.5)] hover:scale-101 transition-transform"
-        style="cursor: pointer;">
+        style="cursor: pointer;" [routerLink]="['/cve']">
 
         <h4
           class="text-lg font-bold text-gray-800 mb-2 group-hover:text-red-700 transition">

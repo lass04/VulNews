@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from './../../../core/services/auth/auth-service';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
-import { AdminSpaceRoutingModule } from "../../../admin-space/admin-space-routing-module";
 import { Router, RouterModule } from '@angular/router';
 
 

@@ -20,10 +20,6 @@ export const routes: Routes = [
      loadChildren: () => import('./user-space/user-space-module').then(m => m.UserSpaceModule)
     },
 
-    { path: 'admin',
-     loadChildren: () => import('./admin-space/admin-space-module').then(m => m.AdminSpaceModule)
-    },
-
     { path: 'login',component:Login},
     { path: 'signup', component:Signup},
     { path: 'categories/:category', component:CategoryComponent},

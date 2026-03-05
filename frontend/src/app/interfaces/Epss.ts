@@ -1,5 +1,5 @@
 export interface Epss{
-    id:number,
+    id:string,
     epss:number,
     percentile:number
 }

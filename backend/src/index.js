@@ -1,16 +1,16 @@
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
 import app from "./app.js";
-import { startNvdCron } from "./cron/nvd.cron.js";
-import { startArticleCron } from "./cron/article.cron.js";
+import { fetchArticlesAndStore } from "./controllers/article.controller.js";
+import { fetchAndStoreNvdCVEs } from "./controllers/cve/nvd.controller.js";
 
 const startServer = async () => {
     
     try{
 
         await connectDB();
-        startNvdCron();
-        startArticleCron();
+        fetchArticlesAndStore();
+        fetchAndStoreNvdCVEs();
 
         app.on("Error",(err)=>{
             console.log(err)

@@ -116,9 +116,13 @@ const getArticles = async (req,res) => {
 
     try{
 
-        const limit = parseInt(req.query.limit);
+        const page = req.query.page;
+        const limit = parseInt(req.query.limit) || 10;
 
-        const articles = await Article.find().limit(limit);
+        const articles = await Article.find()
+        .skip((page-1)*limit)
+        .limit(limit);
+
 
         res.status(200).json({
             data:articles

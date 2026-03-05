@@ -34,3 +34,25 @@ export const getLatestEpssCVEs = async (req, res) => {
   }
 };
 
+export const getEpssByCve = async (req, res) => {
+  
+  try {
+
+    const cveId  = req.params.id;
+
+    const response = await axios.get(EPSS_BASE, {
+      params: { cve: cveId }
+    });
+
+    res.json(response.data.data);
+
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message:"Internal server error",
+      error:error.message
+    });
+  }
+
+};
+

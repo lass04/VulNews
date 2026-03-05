@@ -102,3 +102,80 @@ export const getLatestNvd = async (req,res) => {
     })
   }
 }
+
+const NVD_API_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0";
+
+export const getCveById = async (req, res) => {
+
+  try {
+
+    const cveId  = req.params.id;   
+    
+
+      const response = await axios.get(NVD_API_URL, {
+        params: { cveId }
+       });
+
+       const cve = response.data.vulnerabilities[0].cve;
+
+      const cvss =
+        cve.metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore ??
+        cve.metrics?.cvssMetricV30?.[0]?.cvssData?.baseScore ??
+        null;
+
+      const formattedResult = {
+        id: cve.id,
+        summary: cve.descriptions?.[0]?.value || "No description",
+        published: new Date(cve.published),
+        lastModified: new Date(cve.lastModified),
+        cvss,
+        new: true
+      };
+    
+    res.status(200).json({data:formattedResult});
+
+  } catch (error) {
+    res.status(500).json({
+      success:false,
+      message:"Internal server error",
+      error:error.message
+    });
+  }
+
+};
+
+export const searchCves = async (req, res) => {
+  try {
+    const { query, limit = 20 } = req.query;
+
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required"
+      });
+    }
+
+    const searchRegex = new RegExp(query, 'i');
+    
+    const results = await Cve.find({
+      $or: [
+        { id: searchRegex },
+        { summary: searchRegex }
+      ]
+    })
+    .sort({ published: -1 })
+    .limit(parseInt(limit));
+
+    res.status(200).json({
+      data: results,
+      count: results.length
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};

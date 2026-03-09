@@ -109,14 +109,18 @@ export const getCveById = async (req, res) => {
 
   try {
 
-    const cveId  = req.params.id;   
+    const cveId  = req.params.id;  
     
 
       const response = await axios.get(NVD_API_URL, {
         params: { cveId }
        });
 
-       const cve = response.data.vulnerabilities[0].cve;
+       if(response.data.vulnerabilities.length == 0)
+        return res.sendStatus(404);
+
+       const cve = response.data.vulnerabilities[0].cve; 
+       
 
       const cvss =
         cve.metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore ??
@@ -135,6 +139,7 @@ export const getCveById = async (req, res) => {
     res.status(200).json({data:formattedResult});
 
   } catch (error) {
+
     res.status(500).json({
       success:false,
       message:"Internal server error",

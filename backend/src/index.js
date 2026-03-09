@@ -9,8 +9,8 @@ const startServer = async () => {
     try{
 
         await connectDB();
-        fetchArticlesAndStore();
-        fetchAndStoreNvdCVEs();
+        //fetchArticlesAndStore();
+        //fetchAndStoreNvdCVEs();
 
         app.on("Error",(err)=>{
             console.log(err)

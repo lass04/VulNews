@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { fetchAndStoreNvdCVEs } from "../controllers/cve/nvd.controller.js";
 
 export const startNvdCron = () => {
-  // Runs every day at 02:00 AM UTC
+  // Chaque jour à 11:54
   cron.schedule("54 11 * * *", async () => {
     await fetchAndStoreNvdCVEs();
   });

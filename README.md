@@ -4,7 +4,6 @@
 **VulNews** is an open-source, non-commercial FullStack cybersecurity platform built with the **MEAN stack** (MongoDB, Express, Angular, Node.js).  
 It aggregates vulnerability data (CVEs) and cybersecurity news, and provides community features such as forums and posts.
 
-> ⚠️ This project is for educational and community purposes only. It is not commercial.
 
 ---
 
